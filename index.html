@@ -1,454 +1,487 @@
+<!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>আমার ব্যক্তিগত স্পেস</title>
+<title>আমার ব্যক্তিগত স্পেস — Secure Personal Vault</title>
+<meta name="description" content="আপনার ব্যক্তিগত ছবি ও PDF এর নিরাপদ স্পেস। লগইন সুরক্ষিত, Netlify রেডি, ১০০% স্ট্যাটিক ও প্রাইভেট।">
+<meta name="theme-color" content="#0f172a">
+<meta property="og:title" content="আমার ব্যক্তিগত স্পেস">
+<meta property="og:description" content="Personal Image & PDF Vault — Fast Login, No Registration, Netlify Ready">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236366f1'/%3E%3Cstop offset='1' stop-color='%23ec4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='42' font-size='30' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3ES%3C/text%3E%3C/svg%3E">
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script>
+tailwind.config = { theme: { extend: { fontFamily: { hind: ['Hind Siliguri','Poppins','sans-serif'] } } } }
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
-  :root{
-    --bg:#0f172a;
-    --bg2:#1e293b;
-    --accent:#6366f1;
-    --accent2:#ec4899;
-    --gold:#f59e0b;
-  }
-  *{font-family:'Hind Siliguri','Poppins',sans-serif;}
-  body{
-    margin:0;
-    background:#0f172a;
-    color:#e2e8f0;
-    overflow-x:hidden;
-    min-height:100vh;
-  }
-  /* Animated background */
-  .bg-animated{
-    position:fixed;
-    inset:0;
-    z-index:-2;
-    background:linear-gradient(-45deg,#0f172a,#1e1b4b,#312e81,#0f172a);
-    background-size:400% 400%;
-    animation:gradient 18s ease infinite;
-  }
-  .bg-orbs{
-    position:fixed;
-    inset:0;
-    z-index:-1;
-    overflow:hidden;
-    pointer-events:none;
-  }
-  .orb{
-    position:absolute;
-    border-radius:50%;
-    filter:blur(80px);
-    opacity:.5;
-    animation:float 14s ease-in-out infinite;
-  }
-  .orb1{width:400px;height:400px;background:#6366f1;top:-100px;left:-100px;}
-  .orb2{width:350px;height:350px;background:#ec4899;bottom:-80px;right:-80px;animation-delay:-5s;}
-  .orb3{width:300px;height:300px;background:#f59e0b;top:40%;left:50%;animation-delay:-9s;opacity:.3;}
-  @keyframes gradient{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}
-  @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,-40px)}}
-
-  .glass{
-    background:rgba(255,255,255,.06);
-    backdrop-filter:blur(20px);
-    -webkit-backdrop-filter:blur(20px);
-    border:1px solid rgba(255,255,255,.12);
-    box-shadow:0 25px 50px -12px rgba(0,0,0,.5);
-  }
-  .login-card{
-    animation:slideUp .8s cubic-bezier(.16,1,.3,1);
-  }
-  @keyframes slideUp{from{opacity:0;transform:translateY(40px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
-  .input-field{
-    background:rgba(15,23,42,.5);
-    border:1px solid rgba(255,255,255,.1);
-    transition:all .3s ease;
-  }
-  .input-field:focus{
-    border-color:#818cf8;
-    box-shadow:0 0 0 4px rgba(129,140,248,.15);
-    background:rgba(15,23,42,.7);
-  }
-  .btn-gradient{
-    background:linear-gradient(135deg,#6366f1,#ec4899);
-    background-size:200% 200%;
-    transition:all .3s ease;
-    position:relative;
-    overflow:hidden;
-  }
-  .btn-gradient:hover{
-    background-position:100% 100%;
-    transform:translateY(-2px);
-    box-shadow:0 20px 30px -10px rgba(236,72,153,.4);
-  }
-  .btn-gradient:active{transform:translateY(0);}
-
-  .shake{animation:shake .4s;}
-  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
-
-  /* Dashboard */
-  .sidebar{
-    transition:transform .35s cubic-bezier(.16,1,.3,1);
-  }
-  .nav-item{
-    transition:all .25s ease;
-    border-left:3px solid transparent;
-  }
-  .nav-item:hover{background:rgba(255,255,255,.06);}
-  .nav-item.active{
-    background:linear-gradient(90deg,rgba(99,102,241,.18),transparent);
-    border-left-color:#818cf8;
-    color:#fff;
-  }
-  .card{
-    background:rgba(255,255,255,.04);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:18px;
-    transition:all .3s ease;
-  }
-  .card:hover{
-    transform:translateY(-4px);
-    border-color:rgba(129,140,248,.4);
-    box-shadow:0 20px 40px -15px rgba(99,102,241,.3);
-  }
-  .upload-zone{
-    border:2px dashed rgba(129,140,248,.4);
-    background:rgba(99,102,241,.05);
-    transition:all .3s ease;
-    border-radius:20px;
-  }
-  .upload-zone:hover,.upload-zone.dragover{
-    border-color:#ec4899;
-    background:rgba(236,72,153,.08);
-    transform:scale(1.01);
-  }
-  .file-tile{
-    background:rgba(255,255,255,.04);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:16px;
-    overflow:hidden;
-    transition:all .35s cubic-bezier(.16,1,.3,1);
-    animation:fadeIn .5s ease;
-  }
-  @keyframes fadeIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
-  .file-tile:hover{
-    transform:translateY(-6px) scale(1.02);
-    border-color:rgba(236,72,153,.5);
-    box-shadow:0 25px 50px -15px rgba(236,72,153,.25);
-  }
-  .file-tile img{transition:transform .5s ease;}
-  .file-tile:hover img{transform:scale(1.08);}
-  .badge{
-    background:linear-gradient(135deg,#6366f1,#ec4899);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
-  .toast{
-    position:fixed;
-    bottom:24px;right:24px;
-    z-index:9999;
-    padding:14px 22px;
-    border-radius:14px;
-    font-weight:500;
-    color:#fff;
-    transform:translateX(420px);
-    transition:transform .4s cubic-bezier(.16,1,.3,1);
-    box-shadow:0 20px 40px -10px rgba(0,0,0,.5);
-    display:flex;align-items:center;gap:10px;
-  }
-  .toast.show{transform:translateX(0);}
-  .toast.success{background:linear-gradient(135deg,#10b981,#059669);}
-  .toast.error{background:linear-gradient(135deg,#ef4444,#dc2626);}
-  .toast.info{background:linear-gradient(135deg,#6366f1,#4f46e5);}
-
-  .mobile-menu-btn{display:none;}
-  @media (max-width:768px){
-    .sidebar{
-      position:fixed;top:0;left:0;bottom:0;
-      transform:translateX(-100%);
-      z-index:50;
-      width:240px;
-    }
-    .sidebar.open{transform:translateX(0);}
-    .mobile-menu-btn{display:flex;}
-    .overlay{display:none;}
-    .overlay.show{display:block;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:40;}
-  }
-  .scrollbar::-webkit-scrollbar{width:8px;height:8px;}
-  .scrollbar::-webkit-scrollbar-track{background:transparent;}
-  .scrollbar::-webkit-scrollbar-thumb{background:rgba(129,140,248,.3);border-radius:4px;}
-  .scrollbar::-webkit-scrollbar-thumb:hover{background:rgba(129,140,248,.5);}
-  .stat-num{font-variant-numeric:tabular-nums;}
-  .empty-icon{
-    animation:pulse 3s ease-in-out infinite;
-  }
-  @keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.7;transform:scale(1.05)}}
-  .spinner{
-    border:3px solid rgba(255,255,255,.2);
-    border-top-color:#818cf8;
-    border-radius:50%;
-    width:20px;height:20px;
-    animation:spin .7s linear infinite;
-    display:inline-block;vertical-align:middle;
-  }
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .login-loader{
-    border:3px solid rgba(255,255,255,.2);
-    border-top-color:#fff;
-    border-radius:50%;
-    width:22px;height:22px;
-    animation:spin .7s linear infinite;
-    display:inline-block;
-  }
-  .hide{display:none !important;}
-  .fade-in{animation:fadeInPage .6s ease;}
-  @keyframes fadeInPage{from{opacity:0}to{opacity:1}}
+:root{ --bg:#0f172a; --accent:#6366f1; --accent2:#ec4899; --gold:#f59e0b; }
+*{font-family:'Hind Siliguri','Poppins',sans-serif; -webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:#070d1f;color:#e2e8f0;overflow-x:hidden;min-height:100vh;}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-track{background:#0b1226}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#6366f1,#ec4899);border-radius:99px}
+.bg-animated{position:fixed;inset:0;z-index:-4;background:linear-gradient(-45deg,#070d1f,#1e1b4b,#312e81,#0b1128,#4c1d95,#070d1f);background-size:400% 400%;animation:gradient 20s ease infinite;}
+@keyframes gradient{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}
+#particles{position:fixed;inset:0;z-index:-3;opacity:.7;pointer-events:none;}
+.bg-orbs{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none;}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.45;animation:float 14s ease-in-out infinite;}
+.orb1{width:520px;height:520px;background:#6366f1;top:-140px;left:-140px;}
+.orb2{width:460px;height:460px;background:#ec4899;bottom:-120px;right:-120px;animation-delay:-5s;}
+.orb3{width:320px;height:320px;background:#f59e0b;top:35%;left:55%;animation-delay:-9s;opacity:.22;}
+.orb4{width:300px;height:300px;background:#10b981;top:60%;left:5%;animation-delay:-3s;opacity:.18;}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(50px,-50px) scale(1.08)}}
+.noise{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.grid-overlay{position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 90% 70% at 50% 20%,black 30%,transparent 75%);}
+.glass{background:rgba(13,20,38,.72);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,.1);box-shadow:0 25px 60px -12px rgba(0,0,0,.6);}
+.glass-soft{background:rgba(255,255,255,.05);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.09);}
+.login-card{animation:slideUp .9s cubic-bezier(.16,1,.3,1);}
+@keyframes slideUp{from{opacity:0;transform:translateY(44px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.hero-float{animation:heroFloat 6s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.input-field{background:rgba(7,13,31,.65);border:1px solid rgba(255,255,255,.12);transition:all .3s ease;color:#fff;}
+.input-field:focus{border-color:#818cf8;box-shadow:0 0 0 4px rgba(129,140,248,.16);background:rgba(7,13,31,.9);outline:none;}
+.input-field::placeholder{color:#64748b;}
+.btn-gradient{background:linear-gradient(135deg,#6366f1 0%,#a855f7 45%,#ec4899 100%);background-size:200% 200%;transition:all .3s ease;position:relative;overflow:hidden;}
+.btn-gradient:hover{background-position:100% 100%;transform:translateY(-2px);box-shadow:0 20px 35px -10px rgba(236,72,153,.5);}
+.btn-gradient:active{transform:translateY(0) scale(.98);}
+.btn-gradient::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);transition:left .6s;}
+.btn-gradient:hover::after{left:130%;}
+.badge-grad{background:linear-gradient(135deg,#818cf8,#e879f9,#fbbf24);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.nav-item{transition:all .25s ease;border-left:3px solid transparent;border-radius:0 12px 12px 0;}
+.nav-item:hover{background:rgba(255,255,255,.06);transform:translateX(3px);}
+.nav-item.active{background:linear-gradient(90deg,rgba(99,102,241,.22),rgba(236,72,153,.08),transparent);border-left-color:#818cf8;color:#fff;box-shadow:inset 0 0 20px rgba(99,102,241,.08);}
+.card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;transition:all .35s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(129,140,248,.6),transparent);opacity:0;transition:opacity .3s;}
+.card:hover{transform:translateY(-5px);border-color:rgba(129,140,248,.4);box-shadow:0 22px 45px -15px rgba(99,102,241,.35);}
+.card:hover::before{opacity:1;}
+.upload-zone{border:2px dashed rgba(129,140,248,.45);background:radial-gradient(ellipse at center,rgba(99,102,241,.1),rgba(236,72,153,.04));transition:all .3s ease;border-radius:24px;position:relative;overflow:hidden;}
+.upload-zone:hover,.upload-zone.dragover{border-color:#ec4899;background:radial-gradient(ellipse at center,rgba(236,72,153,.14),rgba(99,102,241,.08));transform:scale(1.005);box-shadow:0 0 0 6px rgba(236,72,153,.08),0 25px 50px -15px rgba(236,72,153,.3);}
+.upload-zone.dragover{border-style:solid;}
+.file-tile{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:18px;overflow:hidden;transition:all .35s cubic-bezier(.16,1,.3,1);animation:fadeIn .5s ease;}
+@keyframes fadeIn{from{opacity:0;transform:scale(.92) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.file-tile:hover{transform:translateY(-7px) scale(1.015);border-color:rgba(236,72,153,.5);box-shadow:0 25px 50px -15px rgba(236,72,153,.3);}
+.file-tile img{transition:transform .6s ease;}
+.file-tile:hover img{transform:scale(1.09);}
+.list-row{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:14px;transition:all .25s ease;animation:fadeIn .4s ease;}
+.list-row:hover{background:rgba(255,255,255,.07);border-color:rgba(129,140,248,.4);transform:translateX(4px);}
+.shake{animation:shake .45s;}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+.toast-wrap{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:10px;max-width:min(92vw,380px);}
+.toast-item{padding:13px 18px;border-radius:14px;font-weight:500;color:#fff;display:flex;align-items:center;gap:10px;box-shadow:0 20px 40px -10px rgba(0,0,0,.6);animation:toastIn .45s cubic-bezier(.16,1,.3,1);font-size:14px;border:1px solid rgba(255,255,255,.15);}
+@keyframes toastIn{from{opacity:0;transform:translateX(80px)}to{opacity:1;transform:translateX(0)}}
+.toast-item.out{transition:all .4s;opacity:0;transform:translateX(80px);}
+.toast-item.success{background:linear-gradient(135deg,#10b981,#059669);}
+.toast-item.error{background:linear-gradient(135deg,#ef4444,#b91c1c);}
+.toast-item.info{background:linear-gradient(135deg,#6366f1,#4f46e5);}
+.modal-bg{background:rgba(3,6,16,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}
+.modal-box{animation:modalIn .45s cubic-bezier(.16,1,.3,1);}
+@keyframes modalIn{from{opacity:0;transform:scale(.9) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.hide{display:none !important;}
+.fade-in{animation:fadePage .6s ease;}
+@keyframes fadePage{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.spinner{border:3px solid rgba(255,255,255,.2);border-top-color:#818cf8;border-radius:50%;width:20px;height:20px;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.login-loader{border:3px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;width:22px;height:22px;animation:spin .7s linear infinite;display:inline-block;}
+.sidebar{transition:transform .38s cubic-bezier(.16,1,.3,1);}
+.mobile-menu-btn{display:none;}
+.overlay{display:none;}
+@media (max-width:900px){
+.sidebar{position:fixed;top:0;left:0;bottom:0;transform:translateX(-105%);z-index:60;width:270px;}
+.sidebar.open{transform:translateX(0);}
+.mobile-menu-btn{display:flex;}
+.overlay.show{display:block;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:55;backdrop-filter:blur(3px);}
+}
+.chip{transition:all .25s ease;cursor:pointer;border:1px solid rgba(255,255,255,.1);}
+.chip.active{background:linear-gradient(135deg,#6366f1,#ec4899);color:#fff;border-color:transparent;box-shadow:0 8px 20px -6px rgba(236,72,153,.5);}
+.chip:not(.active):hover{background:rgba(255,255,255,.08);}
+.progress-track{height:6px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,#6366f1,#ec4899);border-radius:99px;transition:width .2s;box-shadow:0 0 12px rgba(236,72,153,.6);}
+.storage-ring{transform:rotate(-90deg);}
+.storage-ring circle{transition:stroke-dashoffset 1.2s cubic-bezier(.16,1,.3,1);}
+.pulse-dot{position:relative;}
+.pulse-dot::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid #10b981;animation:pulseRing 1.8s ease-out infinite;}
+@keyframes pulseRing{0%{transform:scale(.7);opacity:1}100%{transform:scale(1.4);opacity:0}}
+.code-box{background:#070d1f;border:1px solid rgba(129,140,248,.25);border-radius:14px;font-family:'Space Grotesk',monospace;position:relative;}
+.code-box pre{font-family:ui-monospace,Menlo,Consolas,monospace;}
+.step-num{width:34px;height:34px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;background:linear-gradient(135deg,#6366f1,#ec4899);box-shadow:0 8px 20px -6px rgba(99,102,241,.5);}
+.empty-icon{animation:emptyPulse 3s ease-in-out infinite;}
+@keyframes emptyPulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.75;transform:scale(1.07)}}
+.view-btn.active{background:linear-gradient(135deg,#6366f1,#ec4899);color:#fff;}
+.kbd{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-bottom-width:2px;border-radius:6px;padding:1px 7px;font-size:11px;font-family:monospace;}
+.switch{position:relative;width:44px;height:24px;background:rgba(255,255,255,.12);border-radius:99px;cursor:pointer;transition:.3s;flex-shrink:0;}
+.switch.on{background:linear-gradient(135deg,#6366f1,#ec4899);}
+.switch::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 2px 6px rgba(0,0,0,.4);}
+.switch.on::after{left:23px;}
+select.input-field option{background:#0f172a;}
+.img-zoom-wrap{transition:transform .3s ease;transform-origin:center;}
+.stat-num{font-variant-numeric:tabular-nums;}
+details.netlify-mini summary{cursor:pointer;list-style:none;}
+details.netlify-mini summary::-webkit-details-marker{display:none;}
+.shine-text{background:linear-gradient(110deg,#fff 30%,#a5b4fc 45%,#f0abfc 55%,#fff 70%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4s linear infinite;}
+@keyframes shine{to{background-position:200% center}}
 </style>
 </head>
-<body>
+<body class="font-hind">
+
 <div class="bg-animated"></div>
-<div class="bg-orbs">
-  <div class="orb orb1"></div>
-  <div class="orb orb2"></div>
-  <div class="orb orb3"></div>
+<canvas id="particles"></canvas>
+<div class="bg-orbs"><div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div><div class="orb orb4"></div></div>
+<div class="noise"></div>
+<div class="grid-overlay"></div>
+
+<!-- ================= LOGIN ================= -->
+<div id="loginScreen" class="min-h-screen flex items-center justify-center p-4 sm:p-6">
+<div class="w-full max-w-6xl grid lg:grid-cols-2 gap-6 items-stretch">
+
+<!-- Left hero -->
+<div class="hidden lg:flex flex-col justify-between glass rounded-3xl p-10 relative overflow-hidden">
+<div class="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gradient-to-br from-indigo-600/40 to-pink-600/30 blur-3xl"></div>
+<div>
+<div class="flex items-center gap-3 mb-8">
+<div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-xl shadow-purple-500/30 hero-float"><i class="fa-solid fa-shield-halved text-xl text-white"></i></div>
+<div><div class="font-bold text-white text-lg leading-tight">ব্যক্তিগত স্পেস</div><div class="text-[11px] tracking-[.25em] text-indigo-300 font-semibold">PERSONAL VAULT</div></div>
+<div class="ml-auto flex items-center gap-2 text-[11px] px-3 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300"><span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span> Netlify Ready</div>
+</div>
+<h1 class="text-4xl xl:text-5xl font-bold leading-tight text-white">আপনার <span class="badge-grad">নিরাপদ</span><br><span class="shine-text">ডিজিটাল ভল্ট</span></h1>
+<p class="text-slate-400 mt-4 leading-relaxed">ছবি, PNG, JPG ও PDF — সবকিছু এক জায়গায়। দ্রুত লগইন, কোনো রেজিস্ট্রেশন নেই। ডেটা থাকে শুধু আপনার ডিভাইসে।</p>
+<div class="grid grid-cols-3 gap-3 mt-8">
+<div class="glass-soft rounded-2xl p-4 text-center"><i class="fa-solid fa-bolt text-amber-400 text-xl mb-2"></i><div class="text-white text-sm font-semibold">সুপার ফাস্ট</div><div class="text-slate-500 text-xs">ইনস্ট্যান্ট লগইন</div></div>
+<div class="glass-soft rounded-2xl p-4 text-center"><i class="fa-solid fa-lock text-emerald-400 text-xl mb-2"></i><div class="text-white text-sm font-semibold">১০০% প্রাইভেট</div><div class="text-slate-500 text-xs">লোকাল স্টোরেজ</div></div>
+<div class="glass-soft rounded-2xl p-4 text-center"><i class="fa-solid fa-cloud text-indigo-400 text-xl mb-2"></i><div class="text-white text-sm font-semibold">Netlify</div><div class="text-slate-500 text-xs">১-ক্লিক ডেপ্লয়</div></div>
+</div>
+</div>
+<div class="glass-soft rounded-2xl p-5 mt-4">
+<div class="flex items-center gap-2 mb-3"><i class="fa-solid fa-rocket text-pink-400"></i><span class="text-white font-semibold text-sm">Netlify-তে লাইভ করবেন যেভাবে (৩০ সেকেন্ডে)</span></div>
+<div class="space-y-2.5 text-[13px] text-slate-300">
+<div class="flex gap-3 items-start"><span class="step-num !w-6 !h-6 !rounded-lg text-xs">1</span><span>এই পেজটি <span class="kbd">index.html</span> নামে সেভ করুন</span></div>
+<div class="flex gap-3 items-start"><span class="step-num !w-6 !h-6 !rounded-lg text-xs">2</span><span><span class="text-white font-semibold">app.netlify.com/drop</span> এ গিয়ে ফাইলটি ড্র্যাগ করুন</span></div>
+<div class="flex gap-3 items-start"><span class="step-num !w-6 !h-6 !rounded-lg text-xs">3</span><span>ব্যাস! ফ্রি <span class="kbd">https</span> লিংক পেয়ে যাবেন — বিস্তারিত ভেতরে</span></div>
+</div>
+</div>
 </div>
 
-<!-- ============ LOGIN SCREEN ============ -->
-<div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
-  <div class="login-card glass w-full max-w-md rounded-3xl p-8 sm:p-10">
-    <div class="text-center mb-8">
-      <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mb-5 shadow-2xl shadow-purple-500/30">
-        <i class="fa-solid fa-shield-halved text-3xl text-white"></i>
-      </div>
-      <h1 class="text-3xl font-bold text-white">আমার ব্যক্তিগত স্পেস</h1>
-      <p class="text-slate-400 mt-2">নিরাপদ অঞ্চলে প্রবেশ করতে লগইন করুন</p>
-    </div>
-
-    <form id="loginForm" class="space-y-5" autocomplete="off">
-      <div>
-        <label class="block text-sm font-medium text-slate-300 mb-2">
-          <i class="fa-solid fa-user-shield mr-2 text-indigo-400"></i>ইউজার আইডি
-        </label>
-        <input id="userId" type="text" inputmode="numeric"
-          class="input-field w-full px-4 py-3.5 rounded-xl text-white placeholder-slate-500 outline-none"
-          placeholder="আপনার ইউজার আইডি লিখুন" required>
-      </div>
-      <div>
-        <label class="block text-sm font-medium text-slate-300 mb-2">
-          <i class="fa-solid fa-key mr-2 text-pink-400"></i>পাসওয়ার্ড
-        </label>
-        <div class="relative">
-          <input id="password" type="password"
-            class="input-field w-full px-4 py-3.5 pr-12 rounded-xl text-white placeholder-slate-500 outline-none"
-            placeholder="পাসওয়ার্ড লিখুন" required>
-          <button type="button" id="togglePass" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-2" tabindex="-1">
-            <i class="fa-solid fa-eye"></i>
-          </button>
-        </div>
-      </div>
-
-      <div id="loginError" class="hide bg-red-500/15 border border-red-500/30 text-red-300 text-sm rounded-xl px-4 py-3 flex items-center gap-2">
-        <i class="fa-solid fa-circle-exclamation"></i>
-        <span>ভুল ইউজার আইডি বা পাসওয়ার্ড!</span>
-      </div>
-
-      <button type="submit" id="loginBtn"
-        class="btn-gradient w-full py-3.5 rounded-xl text-white font-semibold text-lg flex items-center justify-center gap-2">
-        <i class="fa-solid fa-right-to-bracket"></i>
-        <span id="loginBtnText">প্রবেশ করুন</span>
-      </button>
-
-      <div class="text-center text-xs text-slate-500 pt-2">
-        <i class="fa-solid fa-lock mr-1"></i> শুধু অনুমোদিত ব্যবহারকারীর জন্য — নিবন্ধন নেই
-      </div>
-    </form>
-  </div>
+<!-- Right login card -->
+<div class="login-card glass rounded-3xl p-7 sm:p-10 flex flex-col justify-center relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+<div class="text-center mb-7">
+<div class="lg:hidden inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mb-4 shadow-2xl shadow-purple-500/30"><i class="fa-solid fa-shield-halved text-2xl text-white"></i></div>
+<h2 class="text-2xl sm:text-3xl font-bold text-white">স্বাগতম ফিরে আসায়</h2>
+<p class="text-slate-400 mt-2 text-sm">নিরাপদ অঞ্চলে প্রবেশ করতে লগইন করুন</p>
+<div class="inline-flex items-center gap-2 mt-3 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-[12px] text-indigo-300"><i class="fa-solid fa-gauge-high"></i> ফাস্ট লগইন • রেজিস্ট্রেশন নেই</div>
+</div>
+<form id="loginForm" class="space-y-5" autocomplete="off">
+<div>
+<label class="block text-sm font-medium text-slate-300 mb-2"><i class="fa-solid fa-user-shield mr-2 text-indigo-400"></i>ইউজার আইডি</label>
+<input id="userId" type="text" inputmode="numeric" class="input-field w-full px-4 py-3.5 rounded-xl text-white placeholder-slate-500" placeholder="01771840026" required>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-300 mb-2"><i class="fa-solid fa-key mr-2 text-pink-400"></i>পাসওয়ার্ড</label>
+<div class="relative">
+<input id="password" type="password" class="input-field w-full px-4 py-3.5 pr-12 rounded-xl text-white placeholder-slate-500" placeholder="••••••••••" required>
+<button type="button" id="togglePass" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-2" tabindex="-1"><i class="fa-solid fa-eye"></i></button>
+</div>
+<div id="capsWarn" class="hide text-amber-300 text-xs mt-2"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Caps Lock চালু আছে</div>
+</div>
+<div class="flex items-center justify-between text-sm">
+<label class="flex items-center gap-2 text-slate-400 cursor-pointer select-none"><div id="rememberSwitch" class="switch"></div> এই ডিভাইসে মনে রাখুন</label>
+<span class="text-slate-500 text-xs"><i class="fa-solid fa-fingerprint mr-1 text-emerald-400"></i> সুরক্ষিত</span>
+</div>
+<div id="loginError" class="hide bg-red-500/15 border border-red-500/30 text-red-300 text-sm rounded-xl px-4 py-3 flex items-center gap-2"><i class="fa-solid fa-circle-exclamation"></i><span>ভুল ইউজার আইডি বা পাসওয়ার্ড! আবার চেষ্টা করুন।</span></div>
+<button type="submit" id="loginBtn" class="btn-gradient w-full py-3.5 rounded-xl text-white font-semibold text-lg flex items-center justify-center gap-2"><i class="fa-solid fa-right-to-bracket"></i><span id="loginBtnText">প্রবেশ করুন</span></button>
+<div class="grid grid-cols-3 gap-2 text-center text-[11px] text-slate-500">
+<div class="glass-soft rounded-lg py-2"><i class="fa-solid fa-image text-pink-400 mr-1"></i> PNG / JPG</div>
+<div class="glass-soft rounded-lg py-2"><i class="fa-solid fa-file-pdf text-rose-400 mr-1"></i> PDF সাপোর্ট</div>
+<div class="glass-soft rounded-lg py-2"><i class="fa-solid fa-bolt text-amber-400 mr-1"></i> Netlify ফাস্ট</div>
+</div>
+<details class="netlify-mini glass-soft rounded-xl px-4 py-3 text-sm">
+<summary class="text-indigo-300 font-semibold flex items-center gap-2"><i class="fa-solid fa-circle-question"></i> Netlify-তে কিভাবে আপলোড করবো? <i class="fa-solid fa-chevron-down ml-auto text-xs"></i></summary>
+<div class="text-slate-400 mt-3 leading-relaxed text-[13px]">
+1) ব্রাউজারে <b class="text-white">Ctrl+S</b> দিয়ে ফাইলটি <b class="text-white">index.html</b> নামে সেভ করুন।<br>
+2) <b class="text-white">app.netlify.com/drop</b> খুলে ফাইলটি টেনে ছাড়ুন।<br>
+3) ২০ সেকেন্ডে লাইভ লিংক পাবেন (https সহ ফ্রি)। কাস্টম ডোমেইন চাইলে Site Settings → Domain থেকে যোগ করুন। লগইনের পর ভেতরে পূর্ণ গাইড + <span class="kbd">netlify.toml</span> কপি বাটন পাবেন।
+</div>
+</details>
+<div class="text-center text-[11px] text-slate-600"><i class="fa-solid fa-lock mr-1"></i> শুধু অনুমোদিত ব্যবহারকারীর জন্য — কোনো নিবন্ধন নেই</div>
+</form>
+</div>
+</div>
 </div>
 
-<!-- ============ DASHBOARD ============ -->
+<!-- ================= DASHBOARD ================= -->
 <div id="dashboard" class="hide">
-  <!-- Sidebar -->
-  <aside id="sidebar" class="sidebar glass fixed top-0 left-0 bottom-0 w-64 p-5 flex flex-col z-50">
-    <div class="flex items-center gap-3 mb-8 pb-5 border-b border-white/10">
-      <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center shadow-lg">
-        <i class="fa-solid fa-user text-white text-lg"></i>
-      </div>
-      <div>
-        <div class="font-bold text-white text-lg">ব্যক্তিগত</div>
-        <div class="text-xs text-slate-400">নিরাপদ স্পেস</div>
-      </div>
-    </div>
+<aside id="sidebar" class="sidebar glass fixed top-0 left-0 bottom-0 w-64 p-5 flex flex-col z-[60]">
+<div class="flex items-center gap-3 mb-6 pb-5 border-b border-white/10">
+<div class="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/30"><i class="fa-solid fa-user-lock text-white"></i></div>
+<div><div class="font-bold text-white leading-tight">ব্যক্তিগত স্পেস</div><div class="text-[11px] text-emerald-300 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span> সুরক্ষিত • Netlify Ready</div></div>
+</div>
+<nav class="flex-1 space-y-1 overflow-y-auto pr-1">
+<button data-view="dashboard" class="nav-item active w-full text-left px-4 py-3 text-slate-300 flex items-center gap-3 text-[15px]"><i class="fa-solid fa-gauge-high w-5 text-indigo-400"></i><span>ড্যাশবোর্ড</span></button>
+<button data-view="images" class="nav-item w-full text-left px-4 py-3 text-slate-300 flex items-center gap-3 text-[15px]"><i class="fa-solid fa-image w-5 text-pink-400"></i><span>ছবি</span><span id="countImg" class="ml-auto text-[11px] px-2 py-0.5 rounded-full bg-white/10">0</span></button>
+<button data-view="pdfs" class="nav-item w-full text-left px-4 py-3 text-slate-300 flex items-center gap-3 text-[15px]"><i class="fa-solid fa-file-pdf w-5 text-rose-400"></i><span>পিডিএফ</span><span id="countPdf" class="ml-auto text-[11px] px-2 py-0.5 rounded-full bg-white/10">0</span></button>
+<button data-view="all" class="nav-item w-full text-left px-4 py-3 text-slate-300 flex items-center gap-3 text-[15px]"><i class="fa-solid fa-folder-open w-5 text-amber-400"></i><span>সব ফাইল</span><span id="countAll" class="ml-auto text-[11px] px-2 py-0.5 rounded-full bg-white/10">0</span></button>
+<button data-view="upload" class="nav-item w-full text-left px-4 py-3 text-slate-300 flex items-center gap-3 text-[15px]"><i class="fa-solid fa-cloud-arrow-up w-5 text-emerald-400"></i><span>আপলোড</span></button>
+<div class="pt-3 mt-3 border-t border-white/10">
+<div class="text-[11px] tracking-widest text-slate-500 px-4 mb-2 font-semibold">ডেপ্লয় ও সেটিংস</div>
+<button data-view="netlify" class="nav-item w-full text-left px-4 py-3 text-slate-300 flex items-center gap-3 text-[15px]"><i class="fa-solid fa-rocket w-5 text-cyan-400"></i><span>Netlify গাইড</span><span class="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">NEW</span></button>
+<button data-view="settings" class="nav-item w-full text-left px-4 py-3 text-slate-300 flex items-center gap-3 text-[15px]"><i class="fa-solid fa-gear w-5 text-slate-400"></i><span>সেটিংস</span></button>
+</div>
+</nav>
+<div class="pt-4 border-t border-white/10 space-y-2">
+<div class="glass-soft rounded-xl p-3">
+<div class="flex justify-between text-[12px] mb-2"><span class="text-slate-400">স্টোরেজ</span><span id="sideSize" class="text-white font-semibold">0 KB</span></div>
+<div class="progress-track"><div id="sideBar" class="progress-fill" style="width:2%"></div></div>
+</div>
+<div class="flex gap-2">
+<button id="lockBtn" class="flex-1 px-3 py-2.5 rounded-xl bg-amber-500/15 border border-amber-500/25 text-amber-300 hover:bg-amber-500/25 text-sm flex items-center justify-center gap-2 transition"><i class="fa-solid fa-lock"></i> লক</button>
+<button id="logoutBtn" class="flex-1 px-3 py-2.5 rounded-xl bg-red-500/15 border border-red-500/25 text-red-300 hover:bg-red-500/25 text-sm flex items-center justify-center gap-2 transition"><i class="fa-solid fa-right-from-bracket"></i> লগআউট</button>
+</div>
+</div>
+</aside>
+<div id="overlay" class="overlay"></div>
 
-    <nav class="flex-1 space-y-1">
-      <button data-view="dashboard" class="nav-item active w-full text-left px-4 py-3 rounded-lg text-slate-300 flex items-center gap-3">
-        <i class="fa-solid fa-gauge-high w-5"></i><span>ড্যাশবোর্ড</span>
-      </button>
-      <button data-view="images" class="nav-item w-full text-left px-4 py-3 rounded-lg text-slate-300 flex items-center gap-3">
-        <i class="fa-solid fa-image w-5"></i><span>ছবি</span>
-      </button>
-      <button data-view="pdfs" class="nav-item w-full text-left px-4 py-3 rounded-lg text-slate-300 flex items-center gap-3">
-        <i class="fa-solid fa-file-pdf w-5"></i><span>পিডিএফ</span>
-      </button>
-      <button data-view="all" class="nav-item w-full text-left px-4 py-3 rounded-lg text-slate-300 flex items-center gap-3">
-        <i class="fa-solid fa-folder-open w-5"></i><span>সব ফাইল</span>
-      </button>
-      <button data-view="upload" class="nav-item w-full text-left px-4 py-3 rounded-lg text-slate-300 flex items-center gap-3">
-        <i class="fa-solid fa-cloud-arrow-up w-5"></i><span>আপলোড</span>
-      </button>
-    </nav>
+<main class="md:ml-64 min-h-screen p-4 sm:p-6 lg:p-8 fade-in max-w-[1400px] mx-auto">
+<!-- Topbar -->
+<header class="flex items-center justify-between gap-3 mb-6 glass rounded-2xl px-4 sm:px-5 py-4 sticky top-3 z-30">
+<div class="flex items-center gap-3 min-w-0">
+<button class="mobile-menu-btn w-10 h-10 rounded-xl bg-white/10 items-center justify-center text-white shrink-0" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+<div class="min-w-0"><h1 id="pageTitle" class="text-lg sm:text-2xl font-bold text-white truncate">ড্যাশবোর্ড</h1><p class="text-[11px] sm:text-[13px] text-slate-400 truncate">স্বাগতম, আপনার ব্যক্তিগত স্পেসে</p></div>
+</div>
+<div class="flex items-center gap-2 sm:gap-3 shrink-0">
+<div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-[12px] text-emerald-300"><span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span> Netlify Live Ready</div>
+<div class="hidden sm:flex items-center gap-2">
+<button onclick="setViewMode('grid')" id="btnGrid" class="view-btn active w-9 h-9 rounded-lg bg-white/10 text-slate-300 flex items-center justify-center text-sm"><i class="fa-solid fa-grip"></i></button>
+<button onclick="setViewMode('list')" id="btnList" class="view-btn w-9 h-9 rounded-lg bg-white/10 text-slate-300 flex items-center justify-center text-sm"><i class="fa-solid fa-list"></i></button>
+</div>
+<div class="hidden sm:flex items-center gap-3 pl-3 border-l border-white/10">
+<div class="text-right"><div class="text-[13px] font-semibold text-white leading-tight">অনুমোদিত ইউজার</div><div class="text-[11px] text-slate-400">01771840026</div></div>
+<div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center text-white font-bold shadow-lg">U</div>
+</div>
+</div>
+</header>
 
-    <div class="pt-4 border-t border-white/10">
-      <button id="logoutBtn" class="w-full text-left px-4 py-3 rounded-lg text-red-300 hover:bg-red-500/10 flex items-center gap-3 transition">
-        <i class="fa-solid fa-right-from-bracket w-5"></i><span>লগআউট</span>
-      </button>
-    </div>
-  </aside>
+<!-- MAIN APP VIEWS -->
+<div id="appViews">
+<!-- Stats -->
+<section id="statsSection" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+<div class="card p-4 sm:p-5"><div class="flex items-center justify-between"><div><div class="text-slate-400 text-[13px]">মোট ফাইল</div><div id="statTotal" class="stat-num text-2xl sm:text-3xl font-bold text-white mt-1">0</div><div class="text-[11px] text-indigo-300 mt-1"><i class="fa-solid fa-database mr-1"></i>লোকাল ভল্ট</div></div><div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl"><i class="fa-solid fa-database"></i></div></div></div>
+<div class="card p-4 sm:p-5"><div class="flex items-center justify-between"><div><div class="text-slate-400 text-[13px]">ছবি</div><div id="statImages" class="stat-num text-2xl sm:text-3xl font-bold text-white mt-1">0</div><div class="text-[11px] text-pink-300 mt-1">PNG • JPG • WebP</div></div><div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-pink-500/20 flex items-center justify-center text-pink-400 text-xl"><i class="fa-solid fa-image"></i></div></div></div>
+<div class="card p-4 sm:p-5"><div class="flex items-center justify-between"><div><div class="text-slate-400 text-[13px]">পিডিএফ</div><div id="statPdfs" class="stat-num text-2xl sm:text-3xl font-bold text-white mt-1">0</div><div class="text-[11px] text-rose-300 mt-1">ডকুমেন্ট</div></div><div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-rose-500/20 flex items-center justify-center text-rose-400 text-xl"><i class="fa-solid fa-file-pdf"></i></div></div></div>
+<div class="card p-4 sm:p-5"><div class="flex items-center justify-between"><div><div class="text-slate-400 text-[13px]">স্টোরেজ</div><div id="statSize" class="stat-num text-xl sm:text-2xl font-bold text-white mt-1">0 KB</div><div class="w-24 sm:w-28 progress-track mt-2"><div id="statBar" class="progress-fill" style="width:2%"></div></div></div><div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-xl"><i class="fa-solid fa-hard-drive"></i></div></div></div>
+</section>
 
-  <div id="overlay" class="overlay"></div>
+<!-- Quick actions -->
+<section id="quickSection" class="grid sm:grid-cols-3 gap-3 mb-6">
+<button onclick="focusUpload()" class="card p-4 flex items-center gap-3 text-left hover:!border-emerald-500/50"><div class="w-11 h-11 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-cloud-arrow-up"></i></div><div><div class="text-white font-semibold text-sm">দ্রুত আপলোড</div><div class="text-slate-500 text-xs">ছবি / PDF যোগ করুন</div></div><i class="fa-solid fa-arrow-right ml-auto text-slate-600 text-sm"></i></button>
+<button onclick="switchView('netlify')" class="card p-4 flex items-center gap-3 text-left hover:!border-cyan-500/50"><div class="w-11 h-11 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-rocket"></i></div><div><div class="text-white font-semibold text-sm">Netlify-তে লাইভ করুন</div><div class="text-slate-500 text-xs">ফ্রি HTTPS ডেপ্লয় গাইড</div></div><i class="fa-solid fa-arrow-right ml-auto text-slate-600 text-sm"></i></button>
+<button onclick="switchView('settings')" class="card p-4 flex items-center gap-3 text-left hover:!border-amber-500/50"><div class="w-11 h-11 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-shield-halved"></i></div><div><div class="text-white font-semibold text-sm">নিরাপত্তা</div><div class="text-slate-500 text-xs">অটো-লক ও ডেটা</div></div><i class="fa-solid fa-arrow-right ml-auto text-slate-600 text-sm"></i></button>
+</section>
 
-  <!-- Main content -->
-  <main class="md:ml-64 min-h-screen p-4 sm:p-6 lg:p-8 fade-in">
-    <!-- Top bar -->
-    <header class="flex items-center justify-between mb-6 glass rounded-2xl px-5 py-4">
-      <div class="flex items-center gap-3">
-        <button class="mobile-menu-btn w-10 h-10 rounded-lg bg-white/10 items-center justify-center text-white" onclick="toggleSidebar()">
-          <i class="fa-solid fa-bars"></i>
-        </button>
-        <div>
-          <h1 id="pageTitle" class="text-xl sm:text-2xl font-bold text-white">ড্যাশবোর্ড</h1>
-          <p class="text-xs sm:text-sm text-slate-400">স্বাগতম, আপনার ব্যক্তিগত স্পেসে</p>
-        </div>
-      </div>
-      <div class="hidden sm:flex items-center gap-3">
-        <div class="text-right">
-          <div class="text-sm font-semibold text-white">অনুমোদিত ইউজার</div>
-          <div class="text-xs text-slate-400">01771840026</div>
-        </div>
-        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center text-white font-bold">U</div>
-      </div>
-    </header>
+<!-- Upload -->
+<section id="uploadSection" class="mb-6">
+<div id="uploadZone" class="upload-zone p-7 sm:p-10 text-center cursor-pointer">
+<div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-pink-500 mb-4 shadow-xl shadow-purple-500/30 hero-float"><i class="fa-solid fa-cloud-arrow-up text-2xl text-white"></i></div>
+<h3 class="text-xl font-bold text-white mb-1.5">ফাইল আপলোড করুন</h3>
+<p class="text-slate-400 text-sm mb-4">ছবি (PNG, JPG, GIF, WebP) অথবা PDF টেনে আনুন বা ক্লিক করে বাছুন<br class="sm:hidden"> — একসাথে অনেকগুলো যাবে</p>
+<div class="btn-gradient px-6 py-2.5 rounded-xl text-white font-medium inline-flex items-center gap-2 text-[15px]"><i class="fa-solid fa-folder-plus"></i> ফাইল নির্বাচন করুন</div>
+<input id="fileInput" type="file" accept="image/*,application/pdf,.png,.jpg,.jpeg,.webp,.gif" multiple class="hidden">
+<p class="text-xs text-slate-500 mt-4">সর্বোচ্চ ফাইল সাইজ: ৫০ MB • সংরক্ষণ: এই ডিভাইসে (IndexedDB) • Netlify-তে হোস্ট করলেও ফাইল আপনার ব্রাউজারেই থাকবে</p>
+</div>
+<div id="uploadProgress" class="space-y-2 mt-3"></div>
+</section>
 
-    <!-- Stats -->
-    <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-      <div class="card p-5">
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="text-slate-400 text-sm">মোট ফাইল</div>
-            <div class="stat-num text-2xl font-bold text-white mt-1" id="statTotal">0</div>
-          </div>
-          <div class="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl"><i class="fa-solid fa-database"></i></div>
-        </div>
-      </div>
-      <div class="card p-5">
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="text-slate-400 text-sm">ছবি</div>
-            <div class="stat-num text-2xl font-bold text-white mt-1" id="statImages">0</div>
-          </div>
-          <div class="w-12 h-12 rounded-xl bg-pink-500/20 flex items-center justify-center text-pink-400 text-xl"><i class="fa-solid fa-image"></i></div>
-        </div>
-      </div>
-      <div class="card p-5">
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="text-slate-400 text-sm">পিডিএফ</div>
-            <div class="stat-num text-2xl font-bold text-white mt-1" id="statPdfs">0</div>
-          </div>
-          <div class="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 text-xl"><i class="fa-solid fa-file-pdf"></i></div>
-        </div>
-      </div>
-      <div class="card p-5">
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="text-slate-400 text-sm">স্টোরেজ</div>
-            <div class="stat-num text-2xl font-bold text-white mt-1" id="statSize">0 KB</div>
-          </div>
-          <div class="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-xl"><i class="fa-solid fa-hard-drive"></i></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Upload zone -->
-    <section id="uploadSection" class="mb-6">
-      <div id="uploadZone" class="upload-zone p-8 sm:p-12 text-center cursor-pointer">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-pink-500 mb-4 shadow-xl">
-          <i class="fa-solid fa-cloud-arrow-up text-2xl text-white"></i>
-        </div>
-        <h3 class="text-xl font-bold text-white mb-2">ফাইল আপলোড করুন</h3>
-        <p class="text-slate-400 text-sm mb-4">ছবি (PNG, JPG, GIF, WebP) অথবা PDF ফাইল টেনে আনুন বা ক্লিক করে বাছুন</p>
-        <button class="btn-gradient px-6 py-2.5 rounded-xl text-white font-medium inline-flex items-center gap-2">
-          <i class="fa-solid fa-folder-plus"></i> ফাইল নির্বাচন করুন
-        </button>
-        <input id="fileInput" type="file" accept="image/*,application/pdf" multiple class="hidden">
-        <p class="text-xs text-slate-500 mt-4">সর্বোচ্চ ফাইল সাইজ: ৫০ MB</p>
-      </div>
-    </section>
-
-    <!-- Files grid -->
-    <section>
-      <div class="flex items-center justify-between mb-4">
-        <h2 id="filesTitle" class="text-lg font-bold text-white">সাম্প্রতিক ফাইল</h2>
-        <div class="flex items-center gap-2">
-          <input id="searchBox" type="text" placeholder="খুঁজুন..." class="input-field px-3 py-2 rounded-lg text-sm text-white outline-none w-32 sm:w-48">
-        </div>
-      </div>
-      <div id="filesGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 scrollbar"></div>
-      <div id="emptyState" class="text-center py-16">
-        <div class="empty-icon inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white/5 mb-4">
-          <i class="fa-solid fa-folder-open text-3xl text-slate-500"></i>
-        </div>
-        <h3 class="text-lg font-semibold text-slate-300">কোনো ফাইল নেই</h3>
-        <p class="text-slate-500 text-sm mt-1">উপরের জোনে ফাইল আপলোড করা শুরু করুন</p>
-      </div>
-    </section>
-
-    <footer class="text-center text-slate-500 text-xs py-6 mt-8">
-      আপনার ব্যক্তিগত স্পেস — সব ডেটা শুধু এই ডিভাইসে সংরক্ষিত থাকে
-    </footer>
-  </main>
+<!-- Files -->
+<section id="filesSection" class="mb-6">
+<div class="flex flex-col sm:flex-row sm:items-center gap-3 justify-between mb-4">
+<h2 id="filesTitle" class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left text-indigo-400 text-base"></i> সাম্প্রতিক ফাইল <span id="resultCount" class="text-xs font-normal px-2.5 py-1 rounded-full bg-white/10 text-slate-300">0</span></h2>
+<div class="flex items-center gap-2 flex-wrap">
+<input id="searchBox" type="text" placeholder="খুঁজুন..." class="input-field px-3.5 py-2 rounded-xl text-sm text-white w-36 sm:w-48">
+<select id="sortSelect" class="input-field px-3 py-2 rounded-xl text-sm text-slate-300 cursor-pointer">
+<option value="new">নতুন আগে</option>
+<option value="old">পুরনো আগে</option>
+<option value="name">নাম (A-Z)</option>
+<option value="size">সাইজ (বড় আগে)</option>
+</select>
+</div>
+</div>
+<div class="flex gap-2 mb-4 flex-wrap">
+<button class="chip active px-4 py-1.5 rounded-full text-[13px] text-slate-300" data-chip="all"><i class="fa-solid fa-layer-group mr-1.5"></i>সব</button>
+<button class="chip px-4 py-1.5 rounded-full text-[13px] text-slate-300" data-chip="image"><i class="fa-solid fa-image mr-1.5"></i>ছবি</button>
+<button class="chip px-4 py-1.5 rounded-full text-[13px] text-slate-300" data-chip="pdf"><i class="fa-solid fa-file-pdf mr-1.5"></i>পিডিএফ</button>
+<button onclick="downloadAll()" class="ml-auto px-4 py-1.5 rounded-full text-[13px] bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition"><i class="fa-solid fa-download mr-1.5"></i>সব ডাউনলোড</button>
+<button onclick="askClear()" class="px-4 py-1.5 rounded-full text-[13px] bg-red-500/10 border border-red-500/20 text-red-300 hover:bg-red-500/20 transition"><i class="fa-solid fa-trash mr-1.5"></i>সব মুছুন</button>
+</div>
+<div id="filesGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4"></div>
+<div id="filesList" class="space-y-2 hide"></div>
+<div id="emptyState" class="text-center py-14 glass-soft rounded-3xl">
+<div class="empty-icon inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-pink-500/20 border border-white/10 mb-4"><i class="fa-solid fa-folder-open text-3xl text-slate-400"></i></div>
+<h3 class="text-lg font-semibold text-slate-200">কোনো ফাইল নেই</h3>
+<p class="text-slate-500 text-sm mt-1 mb-4">উপরের জোনে ফাইল আপলোড করা শুরু করুন</p>
+<button onclick="focusUpload()" class="btn-gradient px-5 py-2.5 rounded-xl text-white text-sm font-medium"><i class="fa-solid fa-upload mr-2"></i>এখনই আপলোড করুন</button>
+</div>
+</section>
 </div>
 
-<!-- Toast -->
-<div id="toast" class="toast"><i class="fa-solid fa-check-circle"></i><span id="toastMsg">সফল!</span></div>
+<!-- NETLIFY GUIDE VIEW -->
+<div id="netlifyView" class="hide fade-in">
+<div class="glass rounded-3xl p-6 sm:p-8 mb-5 relative overflow-hidden">
+<div class="absolute -top-20 -right-20 w-64 h-64 bg-cyan-500/15 blur-3xl rounded-full"></div>
+<div class="flex flex-col sm:flex-row sm:items-center gap-4">
+<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-400 to-teal-500 flex items-center justify-center text-2xl shadow-xl shrink-0"><i class="fa-solid fa-rocket text-white"></i></div>
+<div><h2 class="text-xl sm:text-2xl font-bold text-white">Netlify-তে সাইট লাইভ করুন — সম্পূর্ণ গাইড</h2><p class="text-slate-400 text-sm mt-1">কোডিং ছাড়াই, ১০০% ফ্রিতে, মাত্র ২ মিনিটে • এই ফাইলটিই যথেষ্ট (index.html)</p></div>
+<div class="sm:ml-auto flex items-center gap-2 text-xs px-3 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 shrink-0"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Static • No Backend • Ready</div>
+</div>
+</div>
+<div class="grid lg:grid-cols-2 gap-4 mb-4">
+<div class="card p-6">
+<div class="flex items-center gap-3 mb-4"><span class="step-num">A</span><div><div class="text-white font-bold">সবচেয়ে সহজ: Drag & Drop</div><div class="text-slate-500 text-xs">সুপারিশকৃত • ৩০ সেকেন্ড</div></div></div>
+<ol class="space-y-3 text-sm text-slate-300">
+<li class="flex gap-3"><span class="text-cyan-300 font-bold">1.</span><span>এই পেজে <b class="text-white">Ctrl+S</b> চাপুন → ফাইলের নাম দিন <span class="kbd">index.html</span> → Desktop-এ সেভ করুন।</span></li>
+<li class="flex gap-3"><span class="text-cyan-300 font-bold">2.</span><span>যান <b class="text-white">app.netlify.com/drop</b> → Netlify অ্যাকাউন্টে লগইন করুন (GitHub/Google দিয়ে ফ্রি)।</span></li>
+<li class="flex gap-3"><span class="text-cyan-300 font-bold">3.</span><span><b class="text-white">index.html</b> ফাইলটি টেনে Drop জোনে ছাড়ুন → ২০ সেকেন্ডে লাইভ! যেমন: <span class="kbd">amar-space.netlify.app</span></span></li>
+<li class="flex gap-3"><span class="text-cyan-300 font-bold">4.</span><span>নাম বদলাতে: Site Settings → Change site name।</span></li>
+</ol>
+<button onclick="copyText('app.netlify.com/drop','Netlify Drop লিংক কপি হয়েছে!')" class="mt-4 w-full py-2.5 rounded-xl bg-cyan-500/15 border border-cyan-500/25 text-cyan-300 text-sm hover:bg-cyan-500/25 transition"><i class="fa-solid fa-copy mr-2"></i>লিংক কপি: app.netlify.com/drop</button>
+</div>
+<div class="card p-6">
+<div class="flex items-center gap-3 mb-4"><span class="step-num">B</span><div><div class="text-white font-bold">প্রো উপায়: GitHub + Auto Deploy</div><div class="text-slate-500 text-xs">আপডেট করলেই অটো লাইভ</div></div></div>
+<ol class="space-y-3 text-sm text-slate-300">
+<li class="flex gap-3"><span class="text-purple-300 font-bold">1.</span><span>GitHub-এ নতুন repo বানান (যেমন <span class="kbd">amar-space</span>) → <span class="kbd">index.html</span> আপলোড করুন।</span></li>
+<li class="flex gap-3"><span class="text-purple-300 font-bold">2.</span><span>Netlify → <b class="text-white">Add new site → Import from Git</b> → repo সিলেক্ট করুন।</span></li>
+<li class="flex gap-3"><span class="text-purple-300 font-bold">3.</span><span>Build settings খালি রাখুন (Publish directory: <span class="kbd">.</span>) → Deploy।</span></li>
+<li class="flex gap-3"><span class="text-purple-300 font-bold">4.</span><span>এরপর GitHub-এ ফাইল বদলালেই সাইট অটো-আপডেট হবে।</span></li>
+</ol>
+<button onclick="downloadNetlifyToml()" class="mt-4 w-full py-2.5 rounded-xl btn-gradient text-white text-sm font-semibold"><i class="fa-solid fa-download mr-2"></i>netlify.toml ডাউনলোড করুন</button>
+</div>
+</div>
+<div class="card p-6 mb-4">
+<div class="flex items-center justify-between mb-3 flex-wrap gap-2"><h3 class="text-white font-bold"><i class="fa-solid fa-gear text-indigo-400 mr-2"></i>netlify.toml — কপি করে প্রজেক্টে রাখুন (ঐচ্ছিক কিন্তু সেরা)</h3><button onclick="copyNetlifyToml()" class="px-4 py-2 rounded-lg bg-indigo-500/20 text-indigo-300 text-xs hover:bg-indigo-500/30"><i class="fa-solid fa-copy mr-1"></i> কপি করুন</button></div>
+<div class="code-box p-4 overflow-x-auto text-[12.5px] leading-relaxed"><pre id="tomlCode" class="text-slate-300">[build]
+  publish = "."
 
-<!-- PDF viewer modal -->
-<div id="pdfModal" class="hide fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-  <div class="glass rounded-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
-    <div class="flex items-center justify-between p-4 border-b border-white/10">
-      <h3 id="pdfModalTitle" class="text-white font-semibold truncate">PDF প্রিভিউ</h3>
-      <div class="flex items-center gap-2">
-        <a id="pdfDownload" class="px-3 py-2 rounded-lg bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 text-sm flex items-center gap-2" download>
-          <i class="fa-solid fa-download"></i> ডাউনলোড
-        </a>
-        <button onclick="closePdfModal()" class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-    </div>
-    <iframe id="pdfFrame" class="flex-1 w-full bg-white" frameborder="0"></iframe>
-  </div>
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Cache-Control = "public, max-age=3600"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200</pre></div>
+<div class="grid sm:grid-cols-3 gap-3 mt-4 text-[13px]">
+<div class="glass-soft rounded-xl p-3.5"><i class="fa-solid fa-lock text-emerald-400 mb-1.5 block"></i><b class="text-white">ফ্রি HTTPS</b><br><span class="text-slate-400">Netlify অটো SSL দেয়। Domain → HTTPS Verify।</span></div>
+<div class="glass-soft rounded-xl p-3.5"><i class="fa-solid fa-globe text-indigo-400 mb-1.5 block"></i><b class="text-white">কাস্টম ডোমেইন</b><br><span class="text-slate-400">Site Settings → Domain → Add custom domain।</span></div>
+<div class="glass-soft rounded-xl p-3.5"><i class="fa-solid fa-triangle-exclamation text-amber-400 mb-1.5 block"></i><b class="text-white">গুরুত্বপূর্ণ সতর্কতা</b><br><span class="text-slate-400">পাসওয়ার্ড ফ্রন্টএন্ডে থাকে — সোর্স দেখলে বোঝা যায়। অতি সংবেদনশীল ফাইল রাখবেন না।</span></div>
+</div>
+</div>
+<button onclick="switchView('dashboard')" class="w-full py-3 rounded-2xl glass-soft text-slate-300 hover:text-white text-sm transition"><i class="fa-solid fa-arrow-left mr-2"></i>ড্যাশবোর্ডে ফিরে যান</button>
 </div>
 
-<!-- Image viewer modal -->
-<div id="imgModal" class="hide fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4" onclick="closeImgModal(event)">
-  <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center">
-    <button onclick="closeImgModalBtn()" class="absolute -top-2 -right-2 sm:top-2 sm:right-2 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center">
-      <i class="fa-solid fa-xmark"></i>
-    </button>
-    <img id="imgPreview" class="max-w-full max-h-[80vh] rounded-xl shadow-2xl">
-    <a id="imgDownload" class="mt-4 btn-gradient px-5 py-2.5 rounded-xl text-white font-medium inline-flex items-center gap-2" download>
-      <i class="fa-solid fa-download"></i> ডাউনলোড করুন
-    </a>
-  </div>
+<!-- SETTINGS VIEW -->
+<div id="settingsView" class="hide fade-in">
+<div class="grid lg:grid-cols-2 gap-4">
+<div class="card p-6">
+<h3 class="text-white font-bold mb-1"><i class="fa-solid fa-shield-halved text-emerald-400 mr-2"></i>নিরাপত্তা ও সেশন</h3>
+<p class="text-slate-500 text-[13px] mb-5">লগইন তথ্য ও অটো-লক নিয়ন্ত্রণ করুন</p>
+<div class="space-y-3 text-sm">
+<div class="glass-soft rounded-xl p-4 flex items-center justify-between"><div><div class="text-slate-400 text-xs">ইউজার আইডি</div><div class="text-white font-semibold tracking-wider">01771840026</div></div><i class="fa-solid fa-circle-check text-emerald-400"></i></div>
+<div class="glass-soft rounded-xl p-4"><div class="text-slate-400 text-xs mb-2">অটো-লক সময় (নিষ্ক্রিয় থাকলে)</div><select id="lockSelect" class="input-field w-full px-3 py-2.5 rounded-xl text-sm"><option value="5">৫ মিনিট</option><option value="15" selected>১৫ মিনিট</option><option value="30">৩০ মিনিট</option><option value="0">কখনোই না</option></select></div>
+<div class="flex items-center justify-between glass-soft rounded-xl p-4"><div><div class="text-white font-medium text-sm">ট্যাব লুকালে ব্লার করুন</div><div class="text-slate-500 text-xs">পাশে কেউ থাকলে প্রাইভেসি</div></div><div id="blurSwitch" class="switch on" onclick="this.classList.toggle('on')"></div></div>
+<button onclick="lockNow()" class="w-full py-3 rounded-xl bg-amber-500/15 border border-amber-500/25 text-amber-300 text-sm hover:bg-amber-500/25 transition"><i class="fa-solid fa-lock mr-2"></i>এখনই লক করুন</button>
 </div>
+</div>
+<div class="card p-6">
+<h3 class="text-white font-bold mb-1"><i class="fa-solid fa-database text-indigo-400 mr-2"></i>ডেটা ব্যবস্থাপনা</h3>
+<p class="text-slate-500 text-[13px] mb-5">সব ডেটা এই ব্রাউজারের IndexedDB-তে থাকে</p>
+<div class="glass-soft rounded-xl p-4 mb-4"><div class="flex justify-between text-sm mb-2"><span class="text-slate-400">ব্যবহৃত স্টোরেজ</span><span id="setSize" class="text-white font-bold">0 KB</span></div><div class="progress-track"><div id="setBar" class="progress-fill" style="width:2%"></div></div><p class="text-[11px] text-slate-500 mt-2">Netlify-তে হোস্ট করলেও ফাইল সার্ভারে যায় না — শুধু আপনার ডিভাইসে থাকে। অন্য ডিভাইস/ব্রাউজারে দেখা যাবে না।</p></div>
+<div class="grid grid-cols-2 gap-2">
+<button onclick="exportList()" class="py-2.5 rounded-xl bg-indigo-500/15 border border-indigo-500/25 text-indigo-300 text-sm hover:bg-indigo-500/25 transition"><i class="fa-solid fa-file-export mr-1"></i> লিস্ট এক্সপোর্ট</button>
+<button onclick="askClear()" class="py-2.5 rounded-xl bg-red-500/15 border border-red-500/25 text-red-300 text-sm hover:bg-red-500/25 transition"><i class="fa-solid fa-trash mr-1"></i> সব মুছুন</button>
+</div>
+<div class="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/25 text-[12.5px] text-amber-200/90 leading-relaxed"><i class="fa-solid fa-triangle-exclamation mr-1.5"></i><b>Netlify নোট:</b> এই সাইট ১০০% স্ট্যাটিক। তাই User ID / Password যে কেউ View-Source করলে দেখতে পাবে। এটি ব্যক্তিগত ডিভাইসের জন্য ঠিক আছে, কিন্তু ব্যাংক/এনআইডি-এর মতো অতি গোপন ফাইল রাখার আগে বিষয়টি মাথায় রাখুন।</div>
+<button onclick="switchView('dashboard')" class="mt-4 w-full py-3 rounded-xl glass-soft text-slate-300 text-sm"><i class="fa-solid fa-arrow-left mr-2"></i>ফিরে যান</button>
+</div>
+</div>
+</div>
+
+<footer class="text-center text-slate-500 text-xs py-6 mt-8 border-t border-white/5">
+<div class="flex items-center justify-center gap-2 mb-2"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Netlify Deploy Ready • Static Single-File • IndexedDB Private Storage</div>
+আপনার ব্যক্তিগত স্পেস — সব ডেটা শুধু এই ডিভাইসে সংরক্ষিত থাকে
+</footer>
+</main>
+</div>
+
+<!-- IMAGE MODAL -->
+<div id="imgModal" class="hide fixed inset-0 z-[100] modal-bg flex items-center justify-center p-4">
+<div class="modal-box relative w-full max-w-4xl flex flex-col items-center">
+<div class="w-full glass rounded-2xl p-3 mb-3 flex items-center gap-2 flex-wrap">
+<button onclick="imgZoom(0.15)" class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 text-white"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+<button onclick="imgZoom(-0.15)" class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 text-white"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+<button onclick="imgRotate()" class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 text-white"><i class="fa-solid fa-rotate-right"></i></button>
+<button onclick="imgReset()" class="px-3 h-9 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs">রিসেট</button>
+<div id="imgName" class="text-slate-300 text-sm truncate flex-1 min-w-[120px] px-2"></div>
+<button onclick="closeImgModalBtn()" class="w-9 h-9 rounded-lg bg-red-500/20 hover:bg-red-500/40 text-red-200"><i class="fa-solid fa-xmark"></i></button>
+</div>
+<div class="overflow-auto max-h-[68vh] w-full flex justify-center glass rounded-2xl p-3">
+<div id="imgZoomWrap" class="img-zoom-wrap"><img id="imgPreview" class="max-w-full rounded-xl shadow-2xl" style="max-height:64vh"></div>
+</div>
+<div class="flex gap-2 mt-3 flex-wrap justify-center">
+<a id="imgDownload" class="btn-gradient px-5 py-2.5 rounded-xl text-white text-sm font-medium inline-flex items-center gap-2 cursor-pointer" download><i class="fa-solid fa-download"></i> ডাউনলোড</a>
+<button onclick="deleteCurrent()" class="px-5 py-2.5 rounded-xl bg-red-500/20 border border-red-500/30 text-red-200 text-sm"><i class="fa-solid fa-trash mr-2"></i>মুছুন</button>
+</div>
+</div>
+</div>
+
+<!-- PDF MODAL -->
+<div id="pdfModal" class="hide fixed inset-0 z-[100] modal-bg flex items-center justify-center p-4">
+<div class="modal-box glass rounded-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
+<div class="flex items-center justify-between gap-2 p-4 border-b border-white/10">
+<h3 id="pdfModalTitle" class="text-white font-semibold truncate text-sm sm:text-base">PDF প্রিভিউ</h3>
+<div class="flex items-center gap-2 shrink-0">
+<a id="pdfDownload" class="px-3 py-2 rounded-lg bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 text-sm flex items-center gap-2 cursor-pointer" download><i class="fa-solid fa-download"></i> <span class="hidden sm:inline">ডাউনলোড</span></a>
+<button onclick="closePdfModal()" class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+</div>
+</div>
+<iframe id="pdfFrame" class="flex-1 w-full bg-slate-100" frameborder="0"></iframe>
+</div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div id="confirmModal" class="hide fixed inset-0 z-[110] modal-bg flex items-center justify-center p-4">
+<div class="modal-box glass rounded-2xl w-full max-w-sm p-6 text-center">
+<div class="w-16 h-16 mx-auto rounded-2xl bg-red-500/15 border border-red-500/25 flex items-center justify-center mb-4"><i class="fa-solid fa-triangle-exclamation text-2xl text-red-400"></i></div>
+<h3 id="confirmTitle" class="text-white font-bold text-lg">মুছে ফেলবেন?</h3>
+<p id="confirmDesc" class="text-slate-400 text-sm mt-2 mb-5">এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।</p>
+<div class="flex gap-2"><button onclick="closeConfirm()" class="flex-1 py-3 rounded-xl bg-white/10 text-white text-sm hover:bg-white/15">বাতিল</button><button id="confirmYes" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-red-500 to-rose-600 text-white text-sm font-semibold hover:opacity-90">হ্যাঁ, মুছুন</button></div>
+</div>
+</div>
+
+<!-- RENAME MODAL -->
+<div id="renameModal" class="hide fixed inset-0 z-[110] modal-bg flex items-center justify-center p-4">
+<div class="modal-box glass rounded-2xl w-full max-w-sm p-6">
+<h3 class="text-white font-bold text-lg mb-1"><i class="fa-solid fa-pen text-indigo-400 mr-2"></i>নাম পরিবর্তন</h3>
+<p class="text-slate-500 text-sm mb-4">ফাইলের নতুন নাম লিখুন</p>
+<input id="renameInput" type="text" class="input-field w-full px-4 py-3 rounded-xl text-white text-sm">
+<div class="flex gap-2 mt-4"><button onclick="closeRename()" class="flex-1 py-3 rounded-xl bg-white/10 text-white text-sm">বাতিল</button><button onclick="saveRename()" class="flex-1 py-3 rounded-xl btn-gradient text-white text-sm font-semibold">সেভ করুন</button></div>
+</div>
+</div>
+
+<div id="toastWrap" class="toast-wrap"></div>
 
 <script>
-/* ============ AUTH ============ */
+/* ============ CONFIG ============ */
 const USER_ID = "01771840026";
 const PASSWORD = "6268612345";
+const MAX_SIZE = 50 * 1024 * 1024;
+const QUOTA_VISUAL = 300 * 1024 * 1024;
 
+/* ============ ELEMENTS ============ */
 const loginForm = document.getElementById('loginForm');
 const loginBtn = document.getElementById('loginBtn');
 const loginBtnText = document.getElementById('loginBtnText');
@@ -456,336 +489,361 @@ const loginError = document.getElementById('loginError');
 const togglePass = document.getElementById('togglePass');
 const passwordInput = document.getElementById('password');
 const userIdInput = document.getElementById('userId');
+const rememberSwitch = document.getElementById('rememberSwitch');
+let rememberMe = false;
+rememberSwitch.addEventListener('click', ()=>{ rememberMe=!rememberMe; rememberSwitch.classList.toggle('on',rememberMe); });
 
-// Persist login in session
-if (sessionStorage.getItem('auth') === 'yes') showDashboard();
+if(sessionStorage.getItem('auth')==='yes' || localStorage.getItem('auth')==='yes'){ showDashboard(); }
 
-togglePass.addEventListener('click', () => {
-  const isPass = passwordInput.type === 'password';
-  passwordInput.type = isPass ? 'text' : 'password';
-  togglePass.innerHTML = isPass ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
+togglePass.addEventListener('click', ()=>{
+  const isPass = passwordInput.type==='password';
+  passwordInput.type = isPass?'text':'password';
+  togglePass.innerHTML = isPass?'<i class="fa-solid fa-eye-slash"></i>':'<i class="fa-solid fa-eye"></i>';
+});
+passwordInput.addEventListener('keyup',(e)=>{
+  const caps = e.getModifierState && e.getModifierState('CapsLock');
+  document.getElementById('capsWarn').classList.toggle('hide',!caps);
 });
 
-loginForm.addEventListener('submit', (e) => {
+loginForm.addEventListener('submit',(e)=>{
   e.preventDefault();
   loginError.classList.add('hide');
-  loginBtn.disabled = true;
-  loginBtnText.innerHTML = '<span class="login-loader"></span>';
-
-  setTimeout(() => {  // small delay for UX
-    if (userIdInput.value.trim() === USER_ID && passwordInput.value === PASSWORD) {
-      sessionStorage.setItem('auth', 'yes');
+  loginBtn.disabled=true;
+  loginBtnText.innerHTML='<span class="login-loader"></span>&nbsp; যাচাই হচ্ছে...';
+  setTimeout(()=>{
+    if(userIdInput.value.trim()===USER_ID && passwordInput.value===PASSWORD){
+      if(rememberMe) localStorage.setItem('auth','yes'); else sessionStorage.setItem('auth','yes');
       showDashboard();
-      toast('সফলভাবে লগইন হয়েছে!', 'success');
+      toast('সফলভাবে লগইন হয়েছে! স্বাগতম','success');
+      resetLockTimer();
     } else {
       loginError.classList.remove('hide');
-      document.querySelector('.login-card').classList.add('shake');
-      setTimeout(() => document.querySelector('.login-card').classList.remove('shake'), 400);
-      loginBtn.disabled = false;
-      loginBtnText.textContent = 'প্রবেশ করুন';
+      const card=document.querySelector('.login-card');
+      card.classList.add('shake'); setTimeout(()=>card.classList.remove('shake'),500);
+      loginBtn.disabled=false; loginBtnText.textContent='প্রবেশ করুন';
     }
-  }, 600);
+  },650);
 });
 
-document.getElementById('logoutBtn').addEventListener('click', () => {
-  sessionStorage.removeItem('auth');
-  location.reload();
-});
-
-function showDashboard() {
+function showDashboard(){
   document.getElementById('loginScreen').classList.add('hide');
   document.getElementById('dashboard').classList.remove('hide');
-  renderFiles();
-  updateStats();
+  renderFiles(); updateStats();
+}
+function doLogout(){
+  sessionStorage.removeItem('auth'); localStorage.removeItem('auth');
+  location.reload();
+}
+document.getElementById('logoutBtn').addEventListener('click',doLogout);
+document.getElementById('lockBtn').addEventListener('click',lockNow);
+function lockNow(){
+  sessionStorage.removeItem('auth');
+  if(localStorage.getItem('auth')!=='yes'){ location.reload(); }
+  else { localStorage.removeItem('auth'); location.reload(); }
+  toast('স্পেস লক করা হয়েছে','info');
 }
 
-/* ============ SIDEBAR ============ */
-const navItems = document.querySelectorAll('.nav-item');
-const sidebar = document.getElementById('sidebar');
-const overlay = document.getElementById('overlay');
-const pageTitle = document.getElementById('pageTitle');
-const filesTitle = document.getElementById('filesTitle');
+/* ============ SIDEBAR / VIEWS ============ */
+const navItems=document.querySelectorAll('.nav-item');
+const pageTitle=document.getElementById('pageTitle');
+const filesTitle=document.getElementById('filesTitle');
+let currentFilter='all', currentView='dashboard', viewMode='grid';
+const labels={dashboard:'ড্যাশবোর্ড',images:'ছবি',pdfs:'পিডিএফ',all:'সব ফাইল',upload:'আপলোড',netlify:'Netlify গাইড',settings:'সেটিংস'};
 
-let currentFilter = 'all';
-navItems.forEach(item => {
-  item.addEventListener('click', () => {
-    navItems.forEach(n => n.classList.remove('active'));
-    item.classList.add('active');
-    const view = item.dataset.view;
-    const labels = {dashboard:'ড্যাশবোর্ড', images:'ছবি', pdfs:'পিডিএফ', all:'সব ফাইল', upload:'আপলোড'};
-    pageTitle.textContent = labels[view];
-    filesTitle.textContent = view === 'images' ? 'আপনার ছবি' : view === 'pdfs' ? 'আপনার পিডিএফ' : 'সাম্প্রতিক ফাইল';
-
-    if (view === 'dashboard' || view === 'all') currentFilter = 'all';
-    else if (view === 'images') currentFilter = 'image';
-    else if (view === 'pdfs') currentFilter = 'pdf';
-    else currentFilter = 'all';
-
-    renderFiles();
-    if (window.innerWidth < 768) closeSidebar();
-  });
-});
-
-function toggleSidebar() {
-  sidebar.classList.toggle('open');
-  overlay.classList.toggle('show');
+function switchView(view){
+  navItems.forEach(n=>n.classList.toggle('active',n.dataset.view===view));
+  currentView=view;
+  pageTitle.textContent=labels[view]||'ড্যাশবোর্ড';
+  const appViews=document.getElementById('appViews');
+  const netV=document.getElementById('netlifyView');
+  const setV=document.getElementById('settingsView');
+  if(view==='netlify'){ appViews.classList.add('hide'); setV.classList.add('hide'); netV.classList.remove('hide'); }
+  else if(view==='settings'){ appViews.classList.add('hide'); netV.classList.add('hide'); setV.classList.remove('hide'); }
+  else{
+    appViews.classList.remove('hide'); netV.classList.add('hide'); setV.classList.add('hide');
+    if(view==='dashboard'||view==='all') currentFilter='all';
+    else if(view==='images') currentFilter='image';
+    else if(view==='pdfs') currentFilter='pdf';
+    filesTitle.innerHTML = view==='images' ? '<i class="fa-solid fa-image text-pink-400 text-base"></i> আপনার ছবি' : view==='pdfs' ? '<i class="fa-solid fa-file-pdf text-rose-400 text-base"></i> আপনার পিডিএফ' : '<i class="fa-solid fa-clock-rotate-left text-indigo-400 text-base"></i> সাম্প্রতিক ফাইল';
+    syncChips(); renderFiles();
+    if(view==='upload') focusUpload();
+  }
+  if(window.innerWidth<=900) closeSidebar();
 }
-function closeSidebar() {
-  sidebar.classList.remove('open');
-  overlay.classList.remove('show');
-}
-overlay.addEventListener('click', closeSidebar);
+navItems.forEach(item=>item.addEventListener('click',()=>switchView(item.dataset.view)));
+function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); }
+function closeSidebar(){ document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
+document.getElementById('overlay').addEventListener('click',closeSidebar);
+function focusUpload(){ document.getElementById('uploadZone').scrollIntoView({behavior:'smooth',block:'center'}); setTimeout(()=>document.getElementById('uploadZone').classList.add('dragover'),400); setTimeout(()=>document.getElementById('uploadZone').classList.remove('dragover'),1100); }
+function setViewMode(m){ viewMode=m; document.getElementById('btnGrid').classList.toggle('active',m==='grid'); document.getElementById('btnList').classList.toggle('active',m==='list'); renderFiles(); }
 
-/* ============ INDEXED DB STORAGE ============ */
-const DB_NAME = 'PersonalSpace';
-const STORE = 'files';
+document.querySelectorAll('[data-chip]').forEach(c=>c.addEventListener('click',()=>{ currentFilter=c.dataset.chip; syncChips(); renderFiles(); }));
+function syncChips(){ document.querySelectorAll('[data-chip]').forEach(c=>c.classList.toggle('active',c.dataset.chip===currentFilter)); }
+document.getElementById('sortSelect').addEventListener('change',renderFiles);
+document.getElementById('searchBox').addEventListener('input',renderFiles);
+
+/* ============ INDEXEDDB ============ */
+const DB_NAME='PersonalSpace', STORE='files';
 let db;
-
-function openDB() {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, 1);
-    req.onupgradeneeded = (e) => {
-      const d = e.target.result;
-      if (!d.objectStoreNames.contains(STORE)) {
-        d.createObjectStore(STORE, { keyPath: 'id' });
-      }
-    };
-    req.onsuccess = (e) => { db = e.target.result; resolve(db); };
-    req.onerror = (e) => reject(e);
-  });
-}
-
-async function addFile(fileObj) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE, 'readwrite');
-    tx.objectStore(STORE).add(fileObj);
-    tx.oncomplete = () => resolve();
-    tx.onerror = (e) => reject(e);
-  });
-}
-
-async function getAllFiles() {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE, 'readonly');
-    const req = tx.objectStore(STORE).getAll();
-    req.onsuccess = () => resolve(req.result || []);
-    req.onerror = (e) => reject(e);
-  });
-}
-
-async function deleteFileDB(id) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE, 'readwrite');
-    tx.objectStore(STORE).delete(id);
-    tx.oncomplete = () => resolve();
-    tx.onerror = (e) => reject(e);
-  });
-}
+function openDB(){ return new Promise((resolve,reject)=>{ const req=indexedDB.open(DB_NAME,1); req.onupgradeneeded=(e)=>{ const d=e.target.result; if(!d.objectStoreNames.contains(STORE)) d.createObjectStore(STORE,{keyPath:'id'}); }; req.onsuccess=(e)=>{ db=e.target.result; resolve(db); }; req.onerror=(e)=>reject(e); }); }
+function addFile(o){ return new Promise((res,rej)=>{ const tx=db.transaction(STORE,'readwrite'); tx.objectStore(STORE).add(o); tx.oncomplete=()=>res(); tx.onerror=(e)=>rej(e); }); }
+function getAllFiles(){ return new Promise((res,rej)=>{ if(!db) return res([]); const tx=db.transaction(STORE,'readonly'); const rq=tx.objectStore(STORE).getAll(); rq.onsuccess=()=>res(rq.result||[]); rq.onerror=(e)=>rej(e); }); }
+function deleteFileDB(id){ return new Promise((res,rej)=>{ const tx=db.transaction(STORE,'readwrite'); tx.objectStore(STORE).delete(id); tx.oncomplete=()=>res(); tx.onerror=(e)=>rej(e); }); }
+function updateFileDB(o){ return new Promise((res,rej)=>{ const tx=db.transaction(STORE,'readwrite'); tx.objectStore(STORE).put(o); tx.oncomplete=()=>res(); tx.onerror=(e)=>rej(e); }); }
+function clearDB(){ return new Promise((res,rej)=>{ const tx=db.transaction(STORE,'readwrite'); tx.objectStore(STORE).clear(); tx.oncomplete=()=>res(); tx.onerror=(e)=>rej(e); }); }
+function getFile(id){ return new Promise((res,rej)=>{ const tx=db.transaction(STORE,'readonly'); const rq=tx.objectStore(STORE).get(id); rq.onsuccess=()=>res(rq.result); rq.onerror=rej; }); }
 
 /* ============ UPLOAD ============ */
-const uploadZone = document.getElementById('uploadZone');
-const fileInput = document.getElementById('fileInput');
+const uploadZone=document.getElementById('uploadZone');
+const fileInput=document.getElementById('fileInput');
+const uploadProgress=document.getElementById('uploadProgress');
+uploadZone.addEventListener('click',()=>fileInput.click());
+['dragenter','dragover'].forEach(ev=>uploadZone.addEventListener(ev,(e)=>{e.preventDefault();uploadZone.classList.add('dragover');}));
+['dragleave','drop'].forEach(ev=>uploadZone.addEventListener(ev,(e)=>{e.preventDefault();uploadZone.classList.remove('dragover');}));
+uploadZone.addEventListener('drop',(e)=>handleFiles(e.dataTransfer.files));
+fileInput.addEventListener('change',(e)=>handleFiles(e.target.files));
 
-uploadZone.addEventListener('click', () => fileInput.click());
-['dragenter','dragover'].forEach(ev => uploadZone.addEventListener(ev, (e) => {
-  e.preventDefault(); uploadZone.classList.add('dragover');
-}));
-['dragleave','drop'].forEach(ev => uploadZone.addEventListener(ev, (e) => {
-  e.preventDefault(); uploadZone.classList.remove('dragover');
-}));
-uploadZone.addEventListener('drop', (e) => handleFiles(e.dataTransfer.files));
-fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
-
-async function handleFiles(files) {
-  const arr = Array.from(files);
-  if (!arr.length) return;
-  let added = 0;
-  for (const f of arr) {
-    if (f.size > 50 * 1024 * 1024) { toast(`${f.name} — সাইজ বেশি (৫০MB এর কম রাখুন)`, 'error'); continue; }
-    const isImg = f.type.startsWith('image/');
-    const isPdf = f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf');
-    if (!isImg && !isPdf) { toast(`${f.name} — অসমর্থিত ফাইল`, 'error'); continue; }
-
-    const blob = f; // store Blob directly
-    const id = 'f_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
-    await addFile({
-      id,
-      name: f.name,
-      type: isImg ? 'image' : 'pdf',
-      mime: f.type,
-      size: f.size,
-      addedAt: Date.now(),
-      blob: blob
-    });
-    added++;
+async function handleFiles(files){
+  const arr=Array.from(files||[]); if(!arr.length) return;
+  resetLockTimer();
+  let added=0;
+  for(const f of arr){
+    if(f.size>MAX_SIZE){ toast(f.name+' — ৫০MB এর বেশি!','error'); continue; }
+    const isImg=f.type.startsWith('image/');
+    const isPdf=f.type==='application/pdf'||f.name.toLowerCase().endsWith('.pdf');
+    if(!isImg&&!isPdf){ toast(f.name+' — শুধু ছবি/PDF সমর্থিত','error'); continue; }
+    const id='f_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
+    const progEl=document.createElement('div');
+    progEl.className='glass-soft rounded-xl p-3 flex items-center gap-3 fade-in';
+    progEl.innerHTML='<div class="w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center text-white text-sm shrink-0"><i class="fa-solid '+(isImg?'fa-image':'fa-file-pdf')+'"></i></div><div class="flex-1 min-w-0"><div class="text-white text-[13px] font-medium truncate">'+escapeHtml(f.name)+'</div><div class="progress-track mt-1.5"><div class="progress-fill" style="width:5%"></div></div></div><span class="pct text-xs text-indigo-300 font-semibold">0%</span>';
+    uploadProgress.appendChild(progEl);
+    const fill=progEl.querySelector('.progress-fill'), pct=progEl.querySelector('.pct');
+    let p=5;
+    await new Promise(r=>{ const iv=setInterval(()=>{ p=Math.min(92,p+Math.random()*22); fill.style.width=p+'%'; pct.textContent=Math.floor(p)+'%'; if(p>=92){clearInterval(iv);r();} },140); });
+    try{
+      await addFile({id,name:f.name,type:isImg?'image':'pdf',mime:f.type,size:f.size,addedAt:Date.now(),blob:f});
+      fill.style.width='100%'; pct.textContent='100%';
+      progEl.style.borderColor='rgba(16,185,129,.4)';
+      setTimeout(()=>progEl.remove(),1600);
+      added++;
+    }catch(err){ progEl.remove(); toast('আপলোড ব্যর্থ: '+f.name,'error'); }
   }
-  if (added) {
-    toast(`${added} টি ফাইল আপলোড হয়েছে`, 'success');
-    renderFiles();
-    updateStats();
-  }
-  fileInput.value = '';
+  if(added){ toast(added+' টি ফাইল আপলোড হয়েছে','success'); renderFiles(); updateStats(); }
+  fileInput.value='';
 }
 
 /* ============ RENDER ============ */
-const filesGrid = document.getElementById('filesGrid');
-const emptyState = document.getElementById('emptyState');
-const searchBox = document.getElementById('searchBox');
+const filesGrid=document.getElementById('filesGrid');
+const filesList=document.getElementById('filesList');
+const emptyState=document.getElementById('emptyState');
+const searchBox=document.getElementById('searchBox');
+let allFiles=[], objUrls=[], currentId=null;
 
-let allFiles = [];
-searchBox.addEventListener('input', renderFiles);
-
-async function renderFiles() {
-  allFiles = await getAllFiles();
-  allFiles.sort((a, b) => b.addedAt - a.addedAt);
-
-  const q = searchBox.value.trim().toLowerCase();
-  let filtered = allFiles;
-  if (currentFilter !== 'all') filtered = filtered.filter(f => f.type === currentFilter);
-  if (q) filtered = filtered.filter(f => f.name.toLowerCase().includes(q));
-
-  filesGrid.innerHTML = '';
-  if (!filtered.length) {
-    emptyState.classList.remove('hide');
-    return;
-  }
+async function renderFiles(){
+  try{ allFiles=await getAllFiles(); }catch(e){ allFiles=[]; }
+  allFiles.sort((a,b)=>b.addedAt-a.addedAt);
+  objUrls.forEach(u=>{try{URL.revokeObjectURL(u)}catch(e){}});
+  objUrls=[];
+  const q=searchBox.value.trim().toLowerCase();
+  const sortV=document.getElementById('sortSelect').value;
+  let filtered=[...allFiles];
+  if(currentFilter!=='all') filtered=filtered.filter(f=>f.type===currentFilter);
+  if(q) filtered=filtered.filter(f=>f.name.toLowerCase().includes(q));
+  if(sortV==='old') filtered.sort((a,b)=>a.addedAt-b.addedAt);
+  else if(sortV==='name') filtered.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(sortV==='size') filtered.sort((a,b)=>(b.size||0)-(a.size||0));
+  document.getElementById('resultCount').textContent=filtered.length+' টি';
+  filesGrid.innerHTML=''; filesList.innerHTML='';
+  const showGrid = viewMode==='grid' || window.innerWidth<560;
+  filesGrid.classList.toggle('hide',!showGrid);
+  filesList.classList.toggle('hide',showGrid);
+  if(!filtered.length){ emptyState.classList.remove('hide'); return; }
   emptyState.classList.add('hide');
-
-  filtered.forEach(f => {
-    const url = URL.createObjectURL(f.blob);
-    const tile = document.createElement('div');
-    tile.className = 'file-tile';
-    const sizeStr = formatSize(f.size);
-    const dateStr = new Date(f.addedAt).toLocaleDateString('bn-BD', {day:'numeric',month:'short',year:'numeric'});
-
-    if (f.type === 'image') {
-      tile.innerHTML = `
-        <div class="aspect-square overflow-hidden bg-slate-800 relative">
-          <img src="${url}" class="w-full h-full object-cover" loading="lazy">
-          <span class="absolute top-2 right-2 px-2 py-1 rounded-md bg-black/60 text-xs text-white backdrop-blur">${ext(f.name).toUpperCase()}</span>
-        </div>
-        <div class="p-3">
-          <div class="font-medium text-white text-sm truncate" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</div>
-          <div class="flex items-center justify-between mt-1.5">
-            <span class="text-xs text-slate-400">${sizeStr}</span>
-            <span class="text-xs text-slate-500">${dateStr}</span>
-          </div>
-          <div class="flex gap-1.5 mt-2.5">
-            <button class="flex-1 py-1.5 rounded-lg bg-indigo-500/20 text-indigo-300 text-xs hover:bg-indigo-500/30 flex items-center justify-center gap-1" onclick="viewImage('${f.id}')"><i class="fa-solid fa-eye"></i> দেখুন</button>
-            <button class="px-2.5 py-1.5 rounded-lg bg-red-500/20 text-red-300 text-xs hover:bg-red-500/30" onclick="deleteFile('${f.id}')"><i class="fa-solid fa-trash"></i></button>
-          </div>
-        </div>`;
+  filtered.forEach(f=>{
+    const url=URL.createObjectURL(f.blob); objUrls.push(url);
+    const sizeStr=formatSize(f.size);
+    const dateStr=new Date(f.addedAt).toLocaleDateString('bn-BD',{day:'numeric',month:'short',year:'numeric'});
+    if(showGrid){
+      const tile=document.createElement('div'); tile.className='file-tile';
+      if(f.type==='image'){
+        tile.innerHTML='<div class="aspect-square overflow-hidden bg-slate-800 relative cursor-pointer" onclick="viewImage(\''+f.id+'\')"><img src="'+url+'" class="w-full h-full object-cover" loading="lazy"><span class="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-black/65 text-[11px] text-white backdrop-blur">'+escapeHtml(ext(f.name).toUpperCase()||'IMG')+'</span><span class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition flex items-end justify-center pb-3"><span class="text-white text-xs bg-white/20 backdrop-blur px-3 py-1.5 rounded-full"><i class="fa-solid fa-eye mr-1"></i>দেখুন</span></span></div>'
+        +'<div class="p-3"><div class="font-medium text-white text-[13px] truncate" title="'+escapeHtml(f.name)+'">'+escapeHtml(f.name)+'</div><div class="flex items-center justify-between mt-1"><span class="text-[11px] text-slate-400">'+sizeStr+'</span><span class="text-[11px] text-slate-500">'+dateStr+'</span></div>'
+        +'<div class="flex gap-1.5 mt-2.5"><button class="flex-1 py-1.5 rounded-lg bg-indigo-500/20 text-indigo-300 text-xs hover:bg-indigo-500/35 flex items-center justify-center gap-1 transition" onclick="viewImage(\''+f.id+'\')"><i class="fa-solid fa-eye"></i> দেখুন</button><button class="px-2.5 py-1.5 rounded-lg bg-white/10 text-slate-300 text-xs hover:bg-white/20" title="ডাউনলোড" onclick="downloadFile(\''+f.id+'\')"><i class="fa-solid fa-download"></i></button><button class="px-2.5 py-1.5 rounded-lg bg-white/10 text-slate-300 text-xs hover:bg-white/20" title="নাম বদলান" onclick="openRename(\''+f.id+'\')"><i class="fa-solid fa-pen"></i></button><button class="px-2.5 py-1.5 rounded-lg bg-red-500/20 text-red-300 text-xs hover:bg-red-500/35" onclick="askDelete(\''+f.id+'\')"><i class="fa-solid fa-trash"></i></button></div></div>';
+      } else {
+        tile.innerHTML='<div class="aspect-square bg-gradient-to-br from-rose-600/30 via-red-900/30 to-slate-900 flex flex-col items-center justify-center relative cursor-pointer gap-2" onclick="viewPdf(\''+f.id+'\')"><i class="fa-solid fa-file-pdf text-5xl text-rose-400 drop-shadow-xl"></i><span class="text-[11px] text-rose-200/70 font-semibold tracking-widest">PDF DOCUMENT</span><span class="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-black/60 text-[11px] text-white backdrop-blur">PDF</span></div>'
+        +'<div class="p-3"><div class="font-medium text-white text-[13px] truncate" title="'+escapeHtml(f.name)+'">'+escapeHtml(f.name)+'</div><div class="flex items-center justify-between mt-1"><span class="text-[11px] text-slate-400">'+sizeStr+'</span><span class="text-[11px] text-slate-500">'+dateStr+'</span></div>'
+        +'<div class="flex gap-1.5 mt-2.5"><button class="flex-1 py-1.5 rounded-lg bg-rose-500/20 text-rose-200 text-xs hover:bg-rose-500/35 flex items-center justify-center gap-1 transition" onclick="viewPdf(\''+f.id+'\')"><i class="fa-solid fa-eye"></i> পড়ুন</button><button class="px-2.5 py-1.5 rounded-lg bg-white/10 text-slate-300 text-xs hover:bg-white/20" onclick="downloadFile(\''+f.id+'\')"><i class="fa-solid fa-download"></i></button><button class="px-2.5 py-1.5 rounded-lg bg-white/10 text-slate-300 text-xs hover:bg-white/20" onclick="openRename(\''+f.id+'\')"><i class="fa-solid fa-pen"></i></button><button class="px-2.5 py-1.5 rounded-lg bg-red-500/20 text-red-300 text-xs hover:bg-red-500/35" onclick="askDelete(\''+f.id+'\')"><i class="fa-solid fa-trash"></i></button></div></div>';
+      }
+      filesGrid.appendChild(tile);
     } else {
-      tile.innerHTML = `
-        <div class="aspect-square bg-gradient-to-br from-rose-600/30 to-red-900/40 flex items-center justify-center relative">
-          <i class="fa-solid fa-file-pdf text-5xl text-rose-400"></i>
-          <span class="absolute top-2 right-2 px-2 py-1 rounded-md bg-black/60 text-xs text-white backdrop-blur">PDF</span>
-        </div>
-        <div class="p-3">
-          <div class="font-medium text-white text-sm truncate" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</div>
-          <div class="flex items-center justify-between mt-1.5">
-            <span class="text-xs text-slate-400">${sizeStr}</span>
-            <span class="text-xs text-slate-500">${dateStr}</span>
-          </div>
-          <div class="flex gap-1.5 mt-2.5">
-            <button class="flex-1 py-1.5 rounded-lg bg-indigo-500/20 text-indigo-300 text-xs hover:bg-indigo-500/30 flex items-center justify-center gap-1" onclick="viewPdf('${f.id}')"><i class="fa-solid fa-eye"></i> দেখুন</button>
-            <button class="px-2.5 py-1.5 rounded-lg bg-red-500/20 text-red-300 text-xs hover:bg-red-500/30" onclick="deleteFile('${f.id}')"><i class="fa-solid fa-trash"></i></button>
-          </div>
-        </div>`;
+      const row=document.createElement('div'); row.className='list-row p-3 flex items-center gap-3';
+      const icon = f.type==='image' ? '<img src="'+url+'" class="w-12 h-12 rounded-xl object-cover shrink-0">' : '<div class="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-500/30 to-red-900/40 flex items-center justify-center text-rose-400 text-xl shrink-0"><i class="fa-solid fa-file-pdf"></i></div>';
+      row.innerHTML=icon+'<div class="flex-1 min-w-0"><div class="text-white text-sm font-medium truncate">'+escapeHtml(f.name)+'</div><div class="text-[12px] text-slate-500">'+sizeStr+' • '+dateStr+' • '+(f.type==='image'?'ছবি':'পিডিএফ')+'</div></div>'
+      +'<div class="flex gap-1.5 shrink-0"><button class="w-9 h-9 rounded-lg bg-indigo-500/20 text-indigo-300 text-xs hover:bg-indigo-500/35" onclick="'+(f.type==='image'?'viewImage':'viewPdf')+'(\''+f.id+'\')"><i class="fa-solid fa-eye"></i></button><button class="w-9 h-9 rounded-lg bg-white/10 text-slate-300 text-xs hover:bg-white/20" onclick="downloadFile(\''+f.id+'\')"><i class="fa-solid fa-download"></i></button><button class="w-9 h-9 rounded-lg bg-white/10 text-slate-300 text-xs hover:bg-white/20" onclick="openRename(\''+f.id+'\')"><i class="fa-solid fa-pen"></i></button><button class="w-9 h-9 rounded-lg bg-red-500/20 text-red-300 text-xs hover:bg-red-500/35" onclick="askDelete(\''+f.id+'\')"><i class="fa-solid fa-trash"></i></button></div>';
+      filesList.appendChild(row);
     }
-    filesGrid.appendChild(tile);
   });
 }
 
-async function updateStats() {
-  allFiles = await getAllFiles();
-  const imgs = allFiles.filter(f => f.type === 'image').length;
-  const pdfs = allFiles.filter(f => f.type === 'pdf').length;
-  const totalSize = allFiles.reduce((s, f) => s + (f.size||0), 0);
-  document.getElementById('statTotal').textContent = allFiles.length;
-  document.getElementById('statImages').textContent = imgs;
-  document.getElementById('statPdfs').textContent = pdfs;
-  document.getElementById('statSize').textContent = formatSize(totalSize);
+async function updateStats(){
+  try{ allFiles=await getAllFiles(); }catch(e){ allFiles=[]; }
+  const imgs=allFiles.filter(f=>f.type==='image').length;
+  const pdfs=allFiles.filter(f=>f.type==='pdf').length;
+  const total=allFiles.reduce((s,f)=>s+(f.size||0),0);
+  animateNum('statTotal',allFiles.length); animateNum('statImages',imgs); animateNum('statPdfs',pdfs);
+  document.getElementById('statSize').textContent=formatSize(total);
+  document.getElementById('countImg').textContent=imgs;
+  document.getElementById('countPdf').textContent=pdfs;
+  document.getElementById('countAll').textContent=allFiles.length;
+  const pct=Math.min(100,Math.max(2,(total/QUOTA_VISUAL)*100));
+  document.getElementById('statBar').style.width=pct+'%';
+  document.getElementById('sideBar').style.width=pct+'%';
+  document.getElementById('sideSize').textContent=formatSize(total);
+  const sb=document.getElementById('setSize'); if(sb) sb.textContent=formatSize(total);
+  const sbar=document.getElementById('setBar'); if(sbar) sbar.style.width=pct+'%';
+}
+function animateNum(id,target){
+  const el=document.getElementById(id); const start=parseInt(el.textContent)||0;
+  if(start===target){ el.textContent=target; return; }
+  const step=Math.max(1,Math.ceil(Math.abs(target-start)/20)); let cur=start;
+  const iv=setInterval(()=>{ cur+= (target>start?step:-step); if((target>=start&&cur>=target)||(target<start&&cur<=target)){cur=target;clearInterval(iv);} el.textContent=cur; },30);
 }
 
-async function getFile(id) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE, 'readonly');
-    const req = tx.objectStore(STORE).get(id);
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = reject;
-  });
-}
+/* ============ VIEW / DOWNLOAD / DELETE / RENAME ============ */
+let imgScale=1, imgRot=0;
+function applyImgT(){ document.getElementById('imgZoomWrap').style.transform='scale('+imgScale+') rotate('+imgRot+'deg)'; }
+function imgZoom(d){ imgScale=Math.min(3,Math.max(.4,imgScale+d)); applyImgT(); }
+function imgRotate(){ imgRot=(imgRot+90)%360; applyImgT(); }
+function imgReset(){ imgScale=1; imgRot=0; applyImgT(); }
 
-window.viewImage = async (id) => {
-  const f = await getFile(id);
-  const url = URL.createObjectURL(f.blob);
-  document.getElementById('imgPreview').src = url;
-  document.getElementById('imgDownload').href = url;
-  document.getElementById('imgDownload').download = f.name;
+window.viewImage=async(id)=>{
+  const f=await getFile(id); if(!f) return;
+  currentId=id; imgReset();
+  const url=URL.createObjectURL(f.blob);
+  document.getElementById('imgPreview').src=url;
+  document.getElementById('imgName').textContent=f.name;
+  const d=document.getElementById('imgDownload'); d.href=url; d.download=f.name;
   document.getElementById('imgModal').classList.remove('hide');
+  document.body.style.overflow='hidden';
 };
-function closeImgModal(e) {
-  if (e.target === e.currentTarget) document.getElementById('imgModal').classList.add('hide');
-}
-function closeImgModalBtn() {
-  document.getElementById('imgModal').classList.add('hide');
-}
+function closeImgModalBtn(){ document.getElementById('imgModal').classList.add('hide'); document.body.style.overflow=''; }
+document.getElementById('imgModal').addEventListener('click',(e)=>{ if(e.target.id==='imgModal') closeImgModalBtn(); });
 
-window.viewPdf = async (id) => {
-  const f = await getFile(id);
-  const url = URL.createObjectURL(f.blob);
-  document.getElementById('pdfFrame').src = url;
-  document.getElementById('pdfDownload').href = url;
-  document.getElementById('pdfDownload').download = f.name;
-  document.getElementById('pdfModalTitle').textContent = f.name;
+window.viewPdf=async(id)=>{
+  const f=await getFile(id); if(!f) return;
+  currentId=id;
+  const url=URL.createObjectURL(f.blob);
+  document.getElementById('pdfFrame').src=url;
+  const d=document.getElementById('pdfDownload'); d.href=url; d.download=f.name;
+  document.getElementById('pdfModalTitle').textContent=f.name;
   document.getElementById('pdfModal').classList.remove('hide');
+  document.body.style.overflow='hidden';
 };
-function closePdfModal() {
-  document.getElementById('pdfModal').classList.add('hide');
-  document.getElementById('pdfFrame').src = '';
+function closePdfModal(){ document.getElementById('pdfModal').classList.add('hide'); document.getElementById('pdfFrame').src=''; document.body.style.overflow=''; }
+
+window.downloadFile=async(id)=>{
+  const f=await getFile(id); if(!f) return;
+  const url=URL.createObjectURL(f.blob);
+  const a=document.createElement('a'); a.href=url; a.download=f.name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),4000);
+  toast('ডাউনলোড শুরু: '+f.name,'info');
+};
+function downloadAll(){
+  if(!allFiles.length){ toast('ডাউনলোডের মতো ফাইল নেই','error'); return; }
+  toast(allFiles.length+' টি ফাইল ডাউনলোড হচ্ছে...','info');
+  allFiles.forEach((f,i)=>setTimeout(()=>downloadFile(f.id),i*600));
+}
+function deleteCurrent(){ if(currentId){ closeImgModalBtn(); askDelete(currentId); } }
+
+let pendingDelete=null, pendingClear=false;
+window.askDelete=(id)=>{ pendingDelete=id; pendingClear=false; document.getElementById('confirmTitle').textContent='ফাইল মুছবেন?'; document.getElementById('confirmDesc').textContent='এই ফাইলটি স্থায়ীভাবে মুছে যাবে।'; document.getElementById('confirmModal').classList.remove('hide'); };
+window.askClear=()=>{ if(!allFiles.length){ toast('মোছার মতো ফাইল নেই','error'); return; } pendingDelete=null; pendingClear=true; document.getElementById('confirmTitle').textContent='সব ফাইল মুছবেন?'; document.getElementById('confirmDesc').textContent=allFiles.length+' টি ফাইল স্থায়ীভাবে মুছে যাবে!'; document.getElementById('confirmModal').classList.remove('hide'); };
+function closeConfirm(){ document.getElementById('confirmModal').classList.add('hide'); pendingDelete=null; pendingClear=false; }
+document.getElementById('confirmYes').addEventListener('click',async()=>{
+  if(pendingClear){ await clearDB(); toast('সব ফাইল মুছে ফেলা হয়েছে','info'); }
+  else if(pendingDelete){ await deleteFileDB(pendingDelete); toast('ফাইল মুছে ফেলা হয়েছে','info'); }
+  closeConfirm(); renderFiles(); updateStats();
+});
+
+let renameId=null;
+window.openRename=async(id)=>{ const f=await getFile(id); if(!f) return; renameId=id; document.getElementById('renameInput').value=f.name; document.getElementById('renameModal').classList.remove('hide'); setTimeout(()=>document.getElementById('renameInput').focus(),100); };
+function closeRename(){ document.getElementById('renameModal').classList.add('hide'); renameId=null; }
+async function saveRename(){
+  if(!renameId) return;
+  const v=document.getElementById('renameInput').value.trim();
+  if(!v){ toast('নাম খালি রাখা যাবে না','error'); return; }
+  const f=await getFile(renameId); f.name=v; await updateFileDB(f);
+  closeRename(); toast('নাম পরিবর্তন হয়েছে','success'); renderFiles();
+}
+function exportList(){
+  const data=allFiles.map(f=>({name:f.name,type:f.type,size:f.size,date:new Date(f.addedAt).toISOString()}));
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='amar-space-files.json'; a.click();
+  toast('ফাইল লিস্ট এক্সপোর্ট হয়েছে','success');
 }
 
-window.deleteFile = async (id) => {
-  if (!confirm('এই ফাইলটি মুছে ফেলতে চান?')) return;
-  await deleteFileDB(id);
-  toast('ফাইল মুছে ফেলা হয়েছে', 'info');
-  renderFiles();
-  updateStats();
-};
+/* ============ NETLIFY HELPERS ============ */
+function copyText(t,msg){
+  navigator.clipboard.writeText(t).then(()=>toast(msg||'কপি হয়েছে!','success')).catch(()=>{ const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); toast(msg||'কপি হয়েছে!','success'); });
+}
+function copyNetlifyToml(){ copyText(document.getElementById('tomlCode').innerText,'netlify.toml কপি হয়েছে!'); }
+function downloadNetlifyToml(){
+  const blob=new Blob([document.getElementById('tomlCode').innerText],{type:'text/plain'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='netlify.toml'; a.click();
+  toast('netlify.toml ডাউনলোড হয়েছে','success');
+}
 
 /* ============ UTILS ============ */
-function formatSize(b) {
-  if (!b) return '0 KB';
-  if (b < 1024) return b + ' B';
-  if (b < 1024*1024) return (b/1024).toFixed(1) + ' KB';
-  return (b/1024/1024).toFixed(2) + ' MB';
+function formatSize(b){ if(!b) return '0 KB'; if(b<1024) return b+' B'; if(b<1024*1024) return (b/1024).toFixed(1)+' KB'; if(b<1024*1024*1024) return (b/1024/1024).toFixed(2)+' MB'; return (b/1024/1024/1024).toFixed(2)+' GB'; }
+function ext(n){ const p=n.lastIndexOf('.'); return p>=0?n.slice(p+1):''; }
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function toast(msg,type){
+  type=type||'info';
+  const wrap=document.getElementById('toastWrap');
+  const t=document.createElement('div'); t.className='toast-item '+type;
+  const icon=type==='success'?'fa-check-circle':type==='error'?'fa-circle-exclamation':'fa-circle-info';
+  t.innerHTML='<i class="fa-solid '+icon+'"></i><span>'+escapeHtml(msg)+'</span>';
+  wrap.appendChild(t);
+  setTimeout(()=>{ t.classList.add('out'); setTimeout(()=>t.remove(),400); },3000);
 }
-function ext(name) {
-  const p = name.lastIndexOf('.');
-  return p >= 0 ? name.slice(p+1) : '';
-}
-function escapeHtml(s) {
-  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-function toast(msg, type = 'info') {
-  const t = document.getElementById('toast');
-  t.className = 'toast ' + type;
-  document.getElementById('toastMsg').textContent = msg;
-  const icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-info';
-  t.querySelector('i').className = 'fa-solid ' + icon;
-  t.classList.add('show');
-  clearTimeout(window._toastT);
-  window._toastT = setTimeout(() => t.classList.remove('show'), 3000);
-}
+document.addEventListener('keydown',(e)=>{ if(e.key==='Escape'){ closePdfModal(); closeImgModalBtn(); closeConfirm(); closeRename(); } });
 
-// init DB on load
-openDB().then(() => {
-  if (sessionStorage.getItem('auth') === 'yes') {
-    renderFiles();
-    updateStats();
-  }
-}).catch(err => console.error(err));
+/* ============ AUTO LOCK ============ */
+let lockTimer=null;
+function resetLockTimer(){
+  clearTimeout(lockTimer);
+  const mins=parseInt((document.getElementById('lockSelect')||{}).value||'15');
+  if(!mins) return;
+  lockTimer=setTimeout(()=>{ if(!document.getElementById('dashboard').classList.contains('hide')){ toast('নিরাপত্তার জন্য অটো-লক হয়েছে','info'); setTimeout(lockNow,1200); } },mins*60*1000);
+}
+['click','keydown','touchstart','mousemove'].forEach(ev=>document.addEventListener(ev,()=>{ if(!document.getElementById('dashboard').classList.contains('hide')) resetLockTimer(); },{passive:true}));
+document.getElementById('lockSelect').addEventListener('change',resetLockTimer);
+document.addEventListener('visibilitychange',()=>{
+  const on=document.getElementById('blurSwitch').classList.contains('on');
+  document.body.style.filter=(document.hidden&&on&&!document.getElementById('dashboard').classList.contains('hide'))?'blur(14px)':'';
+});
+
+/* ============ PARTICLES ============ */
+(function(){
+  const c=document.getElementById('particles'), x=c.getContext('2d');
+  let W,H,pts=[];
+  function rs(){ W=c.width=innerWidth; H=c.height=innerHeight; }
+  rs(); addEventListener('resize',rs);
+  for(let i=0;i<55;i++) pts.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*2+0.6,s:Math.random()*0.5+0.15,o:Math.random()*0.6+0.2,ph:Math.random()*Math.PI*2});
+  (function anim(t){
+    x.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+      p.y-=p.s; p.x+=Math.sin(t/2000+p.ph)*0.25;
+      if(p.y<-10){p.y=H+10;p.x=Math.random()*W;}
+      x.beginPath(); x.arc(p.x,p.y,p.r,0,7);
+      x.fillStyle='rgba(165,180,252,'+p.o+')'; x.fill();
+    });
+    requestAnimationFrame(anim);
+  })(0);
+})();
+
+/* ============ INIT ============ */
+openDB().then(()=>{ if(sessionStorage.getItem('auth')==='yes'||localStorage.getItem('auth')==='yes'){ renderFiles(); updateStats(); resetLockTimer(); } }).catch(e=>console.error(e));
 </script>
 </body>
 </html>
